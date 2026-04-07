@@ -28,25 +28,25 @@ import { ApiError } from '@/lib/api';
 
 const registerSchema = z.object({
   nom: z.string().min(1, 'Le nom est requis'),
-  prenom: z.string().min(1, 'Le prenom est requis'),
+  prenom: z.string().min(1, 'Le prénom est requis'),
   email: z.string().email('Adresse email invalide'),
   password: z
     .string()
-    .min(8, 'Le mot de passe doit contenir au moins 8 caracteres'),
+    .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
   workspaceName: z
     .string()
     .min(1, "Le nom de l'espace de travail est requis"),
   workspaceType: z.enum(['societe_edl', 'bailleur', 'agence'], {
-    required_error: "Le type d'activite est requis",
+    required_error: "Le type d'activité est requis",
   }),
 });
 
 type RegisterForm = z.infer<typeof registerSchema>;
 
 const WORKSPACE_TYPES = [
-  { value: 'societe_edl', label: "Societe d'etats des lieux" },
+  { value: 'societe_edl', label: "Société d'états des lieux" },
   { value: 'bailleur', label: 'Bailleur' },
-  { value: 'agence', label: 'Agence immobiliere' },
+  { value: 'agence', label: 'Agence immobilière' },
 ] as const;
 
 export function RegisterPage() {
@@ -70,13 +70,13 @@ export function RegisterPage() {
     setIsSubmitting(true);
     try {
       await registerUser(data);
-      toast.success('Compte cree avec succes');
+      toast.success('Compte créé avec succès');
       navigate('/app');
     } catch (err) {
       const message =
         err instanceof ApiError
           ? err.status === 409
-            ? 'Un compte existe deja avec cet email'
+            ? 'Un compte existe déjà avec cet email'
             : err.message
           : 'Une erreur est survenue';
       toast.error(message);
@@ -99,7 +99,7 @@ export function RegisterPage() {
             <span className="text-[#2563eb]">Checker</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Creez votre espace de travail
+            Créez votre espace de travail
           </p>
         </CardHeader>
 
@@ -123,7 +123,7 @@ export function RegisterPage() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="prenom">Prenom</Label>
+                <Label htmlFor="prenom">Prénom</Label>
                 <Input
                   id="prenom"
                   placeholder="Jean"
@@ -163,7 +163,7 @@ export function RegisterPage() {
               <Input
                 id="reg-password"
                 type="password"
-                placeholder="8 caracteres minimum"
+                placeholder="8 caractères minimum"
                 autoComplete="new-password"
                 className="bg-[#f8fafc] border-[#e2e8f0]"
                 {...form.register('password')}
@@ -180,7 +180,7 @@ export function RegisterPage() {
               <Label htmlFor="workspaceName">Nom de l'espace de travail</Label>
               <Input
                 id="workspaceName"
-                placeholder="Ma societe"
+                placeholder="Ma société"
                 className="bg-[#f8fafc] border-[#e2e8f0]"
                 {...form.register('workspaceName')}
               />
@@ -193,7 +193,7 @@ export function RegisterPage() {
 
             {/* Workspace type */}
             <div className="space-y-2">
-              <Label>Type d'activite</Label>
+              <Label>Type d'activité</Label>
               <Select
                 value={form.watch('workspaceType')}
                 onValueChange={(val) =>
@@ -203,7 +203,7 @@ export function RegisterPage() {
                 }
               >
                 <SelectTrigger className="bg-[#f8fafc] border-[#e2e8f0]">
-                  <SelectValue placeholder="Selectionner un type" />
+                  <SelectValue placeholder="Sélectionner un type" />
                 </SelectTrigger>
                 <SelectContent>
                   {WORKSPACE_TYPES.map((type) => (
@@ -228,14 +228,14 @@ export function RegisterPage() {
               {isSubmitting && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Creer mon compte
+              Créer mon compte
             </Button>
           </CardContent>
         </form>
 
         <CardFooter className="justify-center">
           <p className="text-sm text-muted-foreground">
-            Deja un compte ?{' '}
+            Déjà un compte ?{' '}
             <Link
               to="/login"
               className="font-medium text-[#2563eb] hover:underline"

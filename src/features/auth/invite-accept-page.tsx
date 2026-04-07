@@ -20,11 +20,11 @@ import {
 import { apiGet, apiPost, ApiError } from '@/lib/api';
 
 const inviteSchema = z.object({
-  prenom: z.string().min(1, 'Le prenom est requis'),
+  prenom: z.string().min(1, 'Le prénom est requis'),
   nom: z.string().min(1, 'Le nom est requis'),
   password: z
     .string()
-    .min(8, 'Le mot de passe doit contenir au moins 8 caracteres'),
+    .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
 });
 
 type InviteForm = z.infer<typeof inviteSchema>;
@@ -66,7 +66,7 @@ export function InviteAcceptPage() {
       .catch((err) => {
         setErrorMessage(
           err instanceof ApiError && err.status === 404
-            ? "Cette invitation n'existe pas ou a expire"
+            ? "Cette invitation n'existe pas ou a expiré"
             : "Impossible de charger l'invitation",
         );
         setPageState('error');
@@ -83,7 +83,7 @@ export function InviteAcceptPage() {
 
       localStorage.setItem('imv2_token', response.token);
       setPageState('success');
-      toast.success('Invitation acceptee !');
+      toast.success('Invitation acceptée !');
 
       // Redirect after a short delay for UX
       setTimeout(() => {
@@ -131,7 +131,7 @@ export function InviteAcceptPage() {
               className="mt-6"
               onClick={() => navigate('/login')}
             >
-              Retour a la connexion
+              Retour à la connexion
             </Button>
           </CardContent>
         )}
@@ -167,7 +167,7 @@ export function InviteAcceptPage() {
                 Rejoindre {inviteInfo.workspaceName}
               </CardTitle>
               <CardDescription>
-                {inviteInfo.inviterName} vous invite a rejoindre son espace de
+                {inviteInfo.inviterName} vous invite à rejoindre son espace de
                 travail
               </CardDescription>
             </CardHeader>
@@ -176,7 +176,7 @@ export function InviteAcceptPage() {
               <CardContent className="space-y-4">
                 <div className="rounded-lg bg-[#f8fafc] p-3 text-center">
                   <p className="text-sm text-muted-foreground">
-                    Vous serez connecte avec
+                    Vous serez connecté avec
                   </p>
                   <p className="text-sm font-medium text-foreground">
                     {inviteInfo.email}
@@ -202,7 +202,7 @@ export function InviteAcceptPage() {
                         )}
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="inv-prenom">Prenom</Label>
+                        <Label htmlFor="inv-prenom">Prénom</Label>
                         <Input
                           id="inv-prenom"
                           placeholder="Jean"
@@ -223,7 +223,7 @@ export function InviteAcceptPage() {
                       <Input
                         id="inv-password"
                         type="password"
-                        placeholder="8 caracteres minimum"
+                        placeholder="8 caractères minimum"
                         autoComplete="new-password"
                         className="bg-[#f8fafc] border-[#e2e8f0]"
                         {...form.register('password')}
@@ -247,7 +247,7 @@ export function InviteAcceptPage() {
                   )}
                   {inviteInfo.isExistingUser
                     ? 'Rejoindre le workspace'
-                    : 'Creer mon compte et rejoindre'}
+                    : 'Créer mon compte et rejoindre'}
                 </Button>
               </CardContent>
             </form>

@@ -53,7 +53,7 @@ import { useLot, useUpdateLot, useArchiveLot } from './api';
 // ---------------------------------------------------------------------------
 
 const schema = z.object({
-  designation: z.string().min(1, 'Designation requise'),
+  designation: z.string().min(1, 'Désignation requise'),
   type_bien: z.string().min(1, 'Type requis'),
   reference_interne: z.string().optional(),
   num_appartement: z.string().optional(),
@@ -93,12 +93,12 @@ const TYPES_BIEN = [
 
 const NB_PIECES_OPTIONS = [
   { value: 'studio', label: 'Studio' },
-  { value: '1', label: '1 piece' },
-  { value: '2', label: '2 pieces' },
-  { value: '3', label: '3 pieces' },
-  { value: '4', label: '4 pieces' },
-  { value: '5', label: '5 pieces' },
-  { value: '6+', label: '6+ pieces' },
+  { value: '1', label: '1 pièce' },
+  { value: '2', label: '2 pièces' },
+  { value: '3', label: '3 pièces' },
+  { value: '4', label: '4 pièces' },
+  { value: '5', label: '5 pièces' },
+  { value: '6+', label: '6+ pièces' },
 ];
 
 const DPE_CLASSES = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
@@ -119,10 +119,10 @@ const CHAUFFAGE_TYPES = [
 ];
 
 const CHAUFFAGE_MODES = [
-  { value: 'electrique', label: 'Electrique' },
+  { value: 'electrique', label: 'Électrique' },
   { value: 'gaz', label: 'Gaz' },
   { value: 'fioul', label: 'Fioul' },
-  { value: 'pompe_chaleur', label: 'Pompe a chaleur' },
+  { value: 'pompe_chaleur', label: 'Pompe à chaleur' },
   { value: 'autre', label: 'Autre' },
 ];
 
@@ -167,7 +167,7 @@ function SuccessCheck() {
       className="flex items-center gap-2 text-emerald-600"
     >
       <Check className="h-5 w-5" />
-      <span className="text-sm font-medium">Sauvegarde</span>
+      <span className="text-sm font-medium">Sauvegardé</span>
     </motion.div>
   );
 }
@@ -303,14 +303,14 @@ export function LotDetailPage() {
     await updateLot.mutateAsync(payload);
     setEditing(false);
     setShowSuccess(true);
-    toast.success('Lot mis a jour');
+    toast.success('Lot mis à jour');
     setTimeout(() => setShowSuccess(false), 2000);
   }
 
   async function handleArchive() {
     if (!id) return;
     await archiveLot.mutateAsync(id);
-    toast.success('Lot archive');
+    toast.success('Lot archivé');
     if (lot?.batiment) {
       window.location.href = `/app/patrimoine/batiments/${lot.batiment.id}`;
     } else {
@@ -453,8 +453,8 @@ export function LotDetailPage() {
 
       <Form {...form}>
         <div className="space-y-4">
-          {/* --- Section: Informations generales --- */}
-          <CollapsibleSection title="Informations generales">
+          {/* --- Section: Informations générales --- */}
+          <CollapsibleSection title="Informations générales">
             <AnimatePresence mode="wait">
               {!editing ? (
                 <motion.div
@@ -465,28 +465,28 @@ export function LotDetailPage() {
                   transition={{ duration: 0.15 }}
                   className="divide-y"
                 >
-                  <InfoRow label="Designation" value={lot.designation} />
+                  <InfoRow label="Désignation" value={lot.designation} />
                   <InfoRow label="Type de bien" value={lot.type_bien} />
                   <InfoRow
-                    label="Ref. interne"
+                    label="Réf. interne"
                     value={lot.reference_interne}
                   />
                   <InfoRow
                     label="N° appartement"
                     value={lot.num_appartement}
                   />
-                  <InfoRow label="Nb pieces" value={lot.nb_pieces} />
-                  <InfoRow label="Etage" value={lot.etage} />
+                  <InfoRow label="Nb pièces" value={lot.nb_pieces} />
+                  <InfoRow label="Étage" value={lot.etage} />
                   <InfoRow
                     label="Emplacement / palier"
                     value={lot.emplacement_palier}
                   />
                   <InfoRow
                     label="Surface"
-                    value={lot.surface ? `${lot.surface} m2` : undefined}
+                    value={lot.surface ? `${lot.surface} m²` : undefined}
                   />
                   <InfoRow
-                    label="Meuble"
+                    label="Meublé"
                     value={
                       lot.meuble ? (
                         <Badge
@@ -515,7 +515,7 @@ export function LotDetailPage() {
                     name="designation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Designation</FormLabel>
+                        <FormLabel>Désignation</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
@@ -556,7 +556,7 @@ export function LotDetailPage() {
                       name="reference_interne"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Ref. interne</FormLabel>
+                          <FormLabel>Réf. interne</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -582,7 +582,7 @@ export function LotDetailPage() {
                       name="nb_pieces"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nb pieces</FormLabel>
+                          <FormLabel>Nb pièces</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             value={field.value}
@@ -608,7 +608,7 @@ export function LotDetailPage() {
                       name="etage"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Etage</FormLabel>
+                          <FormLabel>Étage</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -634,7 +634,7 @@ export function LotDetailPage() {
                       name="surface"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Surface (m2)</FormLabel>
+                          <FormLabel>Surface (m²)</FormLabel>
                           <FormControl>
                             <Input type="number" {...field} />
                           </FormControl>
@@ -646,7 +646,7 @@ export function LotDetailPage() {
                       name="meuble"
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
-                          <FormLabel>Meuble</FormLabel>
+                          <FormLabel>Meublé</FormLabel>
                           <FormControl>
                             <Switch
                               checked={field.value}
@@ -662,8 +662,8 @@ export function LotDetailPage() {
             </AnimatePresence>
           </CollapsibleSection>
 
-          {/* --- Section: Energie --- */}
-          <CollapsibleSection title="Energie" defaultOpen={false}>
+          {/* --- Section: Énergie --- */}
+          <CollapsibleSection title="Énergie" defaultOpen={false}>
             <AnimatePresence mode="wait">
               {!editing ? (
                 <motion.div
@@ -974,7 +974,7 @@ export function LotDetailPage() {
             <DialogTitle>Archiver ce lot ?</DialogTitle>
             <DialogDescription>
               Le lot ne sera plus visible dans la liste principale. Cette
-              action est reversible.
+              action est réversible.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

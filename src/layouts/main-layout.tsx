@@ -37,32 +37,32 @@ interface NavItem {
 
 const NAV_GROUPS: { title: string; items: NavItem[] }[] = [
   {
-    title: 'Referentiel',
+    title: 'Référentiel',
     items: [
       { label: 'Parc immobilier', href: '/app/patrimoine', icon: Building2 },
-      { label: 'Tiers', href: '/app/tiers', icon: Users, disabled: true, badge: 'Bientot' },
-      { label: 'Templates', href: '/app/templates', icon: FileText, disabled: true, badge: 'Bientot' },
+      { label: 'Tiers', href: '/app/tiers', icon: Users, disabled: true, badge: 'Bientôt' },
+      { label: 'Templates', href: '/app/templates', icon: FileText, disabled: true, badge: 'Bientôt' },
     ],
   },
   {
-    title: 'Operationnel',
+    title: 'Opérationnel',
     items: [
-      { label: 'Missions', href: '/app/missions', icon: Calendar, disabled: true, badge: 'Bientot' },
-      { label: 'Tableau de bord', href: '/app/dashboard', icon: LayoutDashboard, disabled: true, badge: 'Bientot' },
+      { label: 'Missions', href: '/app/missions', icon: Calendar, disabled: true, badge: 'Bientôt' },
+      { label: 'Tableau de bord', href: '/app/dashboard', icon: LayoutDashboard, disabled: true, badge: 'Bientôt' },
     ],
   },
   {
     title: 'Administration',
     items: [
-      { label: 'Parametres', href: '/app/parametres', icon: Settings },
+      { label: 'Paramètres', href: '/app/parametres', icon: Settings },
     ],
   },
 ];
 
 const WORKSPACE_TYPE_LABELS: Record<string, string> = {
-  societe_edl: "Societe d'EDL",
+  societe_edl: "Société d'EDL",
   bailleur: 'Bailleur',
-  agence: 'Agence immobiliere',
+  agence: 'Agence immobilière',
 };
 
 export function MainLayout() {
@@ -268,7 +268,7 @@ export function MainLayout() {
                   className="cursor-pointer text-destructive focus:text-destructive"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  Se deconnecter
+                  Se déconnecter
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -301,9 +301,9 @@ function Breadcrumbs() {
 
   const LABELS: Record<string, string> = {
     patrimoine: 'Parc immobilier',
-    batiments: 'Batiment',
+    batiments: 'Bâtiment',
     lots: 'Lot',
-    parametres: 'Parametres',
+    parametres: 'Paramètres',
     tiers: 'Tiers',
     templates: 'Templates',
     missions: 'Missions',

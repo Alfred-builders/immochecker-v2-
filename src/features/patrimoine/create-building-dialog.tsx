@@ -48,7 +48,7 @@ const adresseSchema = z.object({
 });
 
 const schema = z.object({
-  designation: z.string().min(1, 'Designation requise'),
+  designation: z.string().min(1, 'Désignation requise'),
   type: z.string().min(1, 'Type requis'),
   num_batiment: z.string().optional(),
   nb_etages: z.coerce.number().int().nonnegative().optional().or(z.literal('')),
@@ -153,7 +153,7 @@ export function CreateBuildingDialog({
     };
 
     await createBatiment.mutateAsync(payload);
-    toast.success('Batiment cree');
+    toast.success('Bâtiment créé');
     form.reset();
     onOpenChange(false);
   }
@@ -162,9 +162,9 @@ export function CreateBuildingDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Nouveau batiment</DialogTitle>
+          <DialogTitle>Nouveau bâtiment</DialogTitle>
           <DialogDescription>
-            Renseignez les informations du batiment et ses adresses.
+            Renseignez les informations du bâtiment et ses adresses.
           </DialogDescription>
         </DialogHeader>
 
@@ -182,9 +182,9 @@ export function CreateBuildingDialog({
                 name="designation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Designation *</FormLabel>
+                    <FormLabel>Désignation *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Residence Les Lilas" {...field} />
+                      <Input placeholder="Résidence Les Lilas" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -210,7 +210,7 @@ export function CreateBuildingDialog({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selectionner un type" />
+                          <SelectValue placeholder="Sélectionner un type" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -239,7 +239,7 @@ export function CreateBuildingDialog({
                 name="num_batiment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>N° batiment</FormLabel>
+                    <FormLabel>N° bâtiment</FormLabel>
                     <FormControl>
                       <Input placeholder="Bat A" {...field} />
                     </FormControl>
@@ -252,7 +252,7 @@ export function CreateBuildingDialog({
                 name="nb_etages"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nb etages</FormLabel>
+                    <FormLabel>Nb étages</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="5" {...field} />
                     </FormControl>
@@ -274,7 +274,7 @@ export function CreateBuildingDialog({
                 name="annee_construction"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Annee de construction</FormLabel>
+                    <FormLabel>Année de construction</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="1990" {...field} />
                     </FormControl>
@@ -287,7 +287,7 @@ export function CreateBuildingDialog({
                 name="reference_interne"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Ref. interne</FormLabel>
+                    <FormLabel>Réf. interne</FormLabel>
                     <FormControl>
                       <Input placeholder="REF-001" {...field} />
                     </FormControl>
@@ -429,7 +429,7 @@ export function CreateBuildingDialog({
                         <FormItem>
                           <FormControl>
                             <Input
-                              placeholder="Complement"
+                              placeholder="Complément"
                               className="h-8 text-sm"
                               {...f}
                             />
@@ -487,7 +487,7 @@ export function CreateBuildingDialog({
                 Annuler
               </Button>
               <Button type="submit" disabled={createBatiment.isPending}>
-                {createBatiment.isPending ? 'Creation...' : 'Creer le batiment'}
+                {createBatiment.isPending ? 'Création...' : 'Créer le bâtiment'}
               </Button>
             </DialogFooter>
           </form>

@@ -38,8 +38,8 @@ import { useCreateLot, useBatiments } from './api';
 // ---------------------------------------------------------------------------
 
 const schema = z.object({
-  batiment_id: z.string().min(1, 'Batiment requis'),
-  designation: z.string().min(1, 'Designation requise'),
+  batiment_id: z.string().min(1, 'Bâtiment requis'),
+  designation: z.string().min(1, 'Désignation requise'),
   type_bien: z.string().min(1, 'Type de bien requis'),
   reference_interne: z.string().optional(),
   num_appartement: z.string().optional(),
@@ -70,12 +70,12 @@ const TYPES_BIEN = [
 
 const NB_PIECES_OPTIONS = [
   { value: 'studio', label: 'Studio' },
-  { value: '1', label: '1 piece' },
-  { value: '2', label: '2 pieces' },
-  { value: '3', label: '3 pieces' },
-  { value: '4', label: '4 pieces' },
-  { value: '5', label: '5 pieces' },
-  { value: '6+', label: '6+ pieces' },
+  { value: '1', label: '1 pièce' },
+  { value: '2', label: '2 pièces' },
+  { value: '3', label: '3 pièces' },
+  { value: '4', label: '4 pièces' },
+  { value: '5', label: '5 pièces' },
+  { value: '6+', label: '6+ pièces' },
 ];
 
 const DPE_CLASSES = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
@@ -140,7 +140,7 @@ export function CreateLotDialog({
     };
 
     await createLot.mutateAsync(payload);
-    toast.success('Lot cree');
+    toast.success('Lot créé');
     form.reset();
     onOpenChange(false);
   }
@@ -151,7 +151,7 @@ export function CreateLotDialog({
         <DialogHeader>
           <DialogTitle>Nouveau lot</DialogTitle>
           <DialogDescription>
-            Ajoutez un lot a un batiment existant.
+            Ajoutez un lot à un bâtiment existant.
           </DialogDescription>
         </DialogHeader>
 
@@ -168,14 +168,14 @@ export function CreateLotDialog({
                 name="batiment_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Batiment *</FormLabel>
+                    <FormLabel>Bâtiment *</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selectionner un batiment" />
+                          <SelectValue placeholder="Sélectionner un bâtiment" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -203,7 +203,7 @@ export function CreateLotDialog({
                 name="designation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Designation *</FormLabel>
+                    <FormLabel>Désignation *</FormLabel>
                     <FormControl>
                       <Input placeholder="Appartement 3B" {...field} />
                     </FormControl>
@@ -231,7 +231,7 @@ export function CreateLotDialog({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selectionner" />
+                          <SelectValue placeholder="Sélectionner" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -260,7 +260,7 @@ export function CreateLotDialog({
                 name="reference_interne"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Ref. interne</FormLabel>
+                    <FormLabel>Réf. interne</FormLabel>
                     <FormControl>
                       <Input placeholder="LOT-001" {...field} />
                     </FormControl>
@@ -293,7 +293,7 @@ export function CreateLotDialog({
                 name="nb_pieces"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nb pieces</FormLabel>
+                    <FormLabel>Nb pièces</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -319,7 +319,7 @@ export function CreateLotDialog({
                 name="etage"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Etage</FormLabel>
+                    <FormLabel>Étage</FormLabel>
                     <FormControl>
                       <Input placeholder="3" {...field} />
                     </FormControl>
@@ -331,7 +331,7 @@ export function CreateLotDialog({
                 name="surface"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Surface (m2)</FormLabel>
+                    <FormLabel>Surface (m²)</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="65" {...field} />
                     </FormControl>
@@ -404,7 +404,7 @@ export function CreateLotDialog({
                 name="meuble"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Meuble</FormLabel>
+                    <FormLabel>Meublé</FormLabel>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -425,7 +425,7 @@ export function CreateLotDialog({
                 Annuler
               </Button>
               <Button type="submit" disabled={createLot.isPending}>
-                {createLot.isPending ? 'Creation...' : 'Creer le lot'}
+                {createLot.isPending ? 'Création...' : 'Créer le lot'}
               </Button>
             </DialogFooter>
           </form>

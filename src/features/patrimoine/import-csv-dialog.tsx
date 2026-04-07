@@ -152,7 +152,7 @@ export function ImportCSVDialog({ open, onOpenChange }: ImportCSVDialogProps) {
         <DialogHeader>
           <DialogTitle>Importer un fichier CSV</DialogTitle>
           <DialogDescription>
-            Importez vos batiments et lots depuis un fichier CSV.
+            Importez vos bâtiments et lots depuis un fichier CSV.
           </DialogDescription>
         </DialogHeader>
 
@@ -290,7 +290,7 @@ export function ImportCSVDialog({ open, onOpenChange }: ImportCSVDialogProps) {
                 </div>
 
                 <p className="text-xs text-muted-foreground text-center">
-                  Apercu des 5 premieres lignes
+                  Aperçu des 5 premières lignes
                 </p>
               </motion.div>
             )}
@@ -320,7 +320,7 @@ export function ImportCSVDialog({ open, onOpenChange }: ImportCSVDialogProps) {
 
                 <div className="text-center">
                   <p className="text-lg font-semibold">
-                    {result.imported} lignes importees
+                    {result.imported} lignes importées
                   </p>
                   {result.errors.length > 0 && (
                     <p className="mt-1 text-sm text-amber-600">

@@ -38,7 +38,7 @@ import { useCreateHouse } from './api';
 // ---------------------------------------------------------------------------
 
 const schema = z.object({
-  designation: z.string().min(1, 'Designation requise'),
+  designation: z.string().min(1, 'Désignation requise'),
   rue: z.string().min(1, 'Rue requise'),
   code_postal: z.string().min(1, 'Code postal requis'),
   ville: z.string().min(1, 'Ville requise'),
@@ -56,12 +56,12 @@ type FormValues = z.infer<typeof schema>;
 
 const NB_PIECES_OPTIONS = [
   { value: 'studio', label: 'Studio' },
-  { value: '1', label: '1 piece' },
-  { value: '2', label: '2 pieces' },
-  { value: '3', label: '3 pieces' },
-  { value: '4', label: '4 pieces' },
-  { value: '5', label: '5 pieces' },
-  { value: '6+', label: '6+ pieces' },
+  { value: '1', label: '1 pièce' },
+  { value: '2', label: '2 pièces' },
+  { value: '3', label: '3 pièces' },
+  { value: '4', label: '4 pièces' },
+  { value: '5', label: '5 pièces' },
+  { value: '6+', label: '6+ pièces' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -116,7 +116,7 @@ export function CreateHouseDialog({
     };
 
     await createHouse.mutateAsync(payload);
-    toast.success('Maison creee');
+    toast.success('Maison créée');
     form.reset();
     onOpenChange(false);
   }
@@ -127,7 +127,7 @@ export function CreateHouseDialog({
         <DialogHeader>
           <DialogTitle>Nouvelle maison</DialogTitle>
           <DialogDescription>
-            Formulaire simplifie pour ajouter une maison individuelle.
+            Formulaire simplifié pour ajouter une maison individuelle.
           </DialogDescription>
         </DialogHeader>
 
@@ -144,7 +144,7 @@ export function CreateHouseDialog({
                 name="designation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Designation *</FormLabel>
+                    <FormLabel>Désignation *</FormLabel>
                     <FormControl>
                       <Input placeholder="Maison rue des Acacias" {...field} />
                     </FormControl>
@@ -222,7 +222,7 @@ export function CreateHouseDialog({
                 name="surface"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Surface (m2)</FormLabel>
+                    <FormLabel>Surface (m²)</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="85" {...field} />
                     </FormControl>
@@ -235,7 +235,7 @@ export function CreateHouseDialog({
                 name="nb_pieces"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nb pieces</FormLabel>
+                    <FormLabel>Nb pièces</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -271,7 +271,7 @@ export function CreateHouseDialog({
                 name="etage"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Etage</FormLabel>
+                    <FormLabel>Étage</FormLabel>
                     <FormControl>
                       <Input placeholder="RDC" {...field} />
                     </FormControl>
@@ -284,7 +284,7 @@ export function CreateHouseDialog({
                 name="meuble"
                 render={({ field }) => (
                   <FormItem className="flex flex-col justify-end">
-                    <FormLabel>Meuble</FormLabel>
+                    <FormLabel>Meublé</FormLabel>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -305,7 +305,7 @@ export function CreateHouseDialog({
                 Annuler
               </Button>
               <Button type="submit" disabled={createHouse.isPending}>
-                {createHouse.isPending ? 'Creation...' : 'Creer la maison'}
+                {createHouse.isPending ? 'Création...' : 'Créer la maison'}
               </Button>
             </DialogFooter>
           </form>

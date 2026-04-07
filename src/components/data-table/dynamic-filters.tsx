@@ -62,7 +62,7 @@ const OPERATORS_BY_TYPE: Record<string, { value: string; label: string }[]> = {
   date: [
     { value: 'equals', label: 'Le' },
     { value: 'before', label: 'Avant' },
-    { value: 'after', label: 'Apres' },
+    { value: 'after', label: 'Après' },
   ],
 };
 

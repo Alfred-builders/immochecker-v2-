@@ -80,7 +80,7 @@ type WorkspaceFormValues = z.infer<typeof workspaceSchema>;
 
 const inviteSchema = z.object({
   email: z.string().email('Email invalide'),
-  role: z.string().min(1, 'Role requis'),
+  role: z.string().min(1, 'Rôle requis'),
 });
 
 type InviteFormValues = z.infer<typeof inviteSchema>;
@@ -92,14 +92,14 @@ type InviteFormValues = z.infer<typeof inviteSchema>;
 const WORKSPACE_TYPES = [
   { value: 'syndic', label: 'Syndic' },
   { value: 'bailleur', label: 'Bailleur' },
-  { value: 'agence', label: 'Agence immobiliere' },
+  { value: 'agence', label: 'Agence immobilière' },
   { value: 'sci', label: 'SCI' },
   { value: 'autre', label: 'Autre' },
 ];
 
 const ROLES = [
   { value: 'admin', label: 'Admin' },
-  { value: 'editor', label: 'Editeur' },
+  { value: 'editor', label: 'Éditeur' },
   { value: 'viewer', label: 'Lecteur' },
 ];
 
@@ -198,7 +198,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
   async function onSubmit(values: WorkspaceFormValues) {
     try {
       await updateWorkspace.mutateAsync({ id: workspaceId, ...values });
-      toast.success('Parametres enregistres');
+      toast.success('Paramètres enregistrés');
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch {
@@ -270,7 +270,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selectionner un type" />
+                        <SelectValue placeholder="Sélectionner un type" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -309,7 +309,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
             />
           </motion.div>
 
-          {/* Email + Telephone */}
+          {/* Email + Téléphone */}
           <motion.div
             custom={3}
             variants={fieldVariants}
@@ -339,7 +339,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
               name="telephone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Telephone</FormLabel>
+                  <FormLabel>Téléphone</FormLabel>
                   <FormControl>
                     <Input placeholder="01 23 45 67 89" {...field} />
                   </FormControl>
@@ -467,7 +467,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
               {updateWorkspace.isPending
                 ? 'Enregistrement...'
                 : saved
-                  ? 'Enregistre !'
+                  ? 'Enregistré !'
                   : 'Enregistrer'}
             </Button>
           </motion.div>
@@ -478,7 +478,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
 }
 
 // ---------------------------------------------------------------------------
-// Equipe Tab
+// Équipe Tab
 // ---------------------------------------------------------------------------
 
 function EquipeTab({ workspaceId }: { workspaceId: string }) {
@@ -498,7 +498,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
   async function onInvite(values: InviteFormValues) {
     try {
       await invite.mutateAsync(values);
-      toast.success(`Invitation envoyee a ${values.email}`);
+      toast.success(`Invitation envoyée à ${values.email}`);
       inviteForm.reset({ email: '', role: 'editor' });
     } catch {
       toast.error("Erreur lors de l'envoi de l'invitation");
@@ -512,16 +512,16 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
         userId: memberId,
         role: newRole,
       });
-      toast.success('Role mis a jour');
+      toast.success('Rôle mis à jour');
     } catch {
-      toast.error('Erreur lors de la mise a jour du role');
+      toast.error('Erreur lors de la mise à jour du rôle');
     }
   }
 
   async function handleRemoveMember(memberId: string, memberName: string) {
     try {
       await removeMember.mutateAsync({ workspaceId, userId: memberId });
-      toast.success(`${memberName} a ete retire`);
+      toast.success(`${memberName} a été retiré`);
     } catch {
       toast.error('Erreur lors de la suppression');
     }
@@ -530,7 +530,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
   async function handleCancelInvitation(invitationId: string) {
     try {
       await cancelInvitation.mutateAsync(invitationId);
-      toast.success('Invitation annulee');
+      toast.success('Invitation annulée');
     } catch {
       toast.error("Erreur lors de l'annulation");
     }
@@ -586,7 +586,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
               name="role"
               render={({ field }) => (
                 <FormItem className="w-40">
-                  <FormLabel>Role</FormLabel>
+                  <FormLabel>Rôle</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -683,7 +683,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
       <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
         <div className="mb-4">
           <h2 className="text-lg font-semibold text-foreground">
-            Membres de l'equipe
+            Membres de l'équipe
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {members?.length ?? 0} membre{(members?.length ?? 0) > 1 ? 's' : ''}
@@ -695,7 +695,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
             <TableRow>
               <TableHead>Membre</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
+              <TableHead>Rôle</TableHead>
               <TableHead className="w-[80px]" />
             </TableRow>
           </TableHeader>
@@ -748,7 +748,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
                             'bg-slate-100 text-slate-600 border-slate-200'
                           }
                         >
-                          {member.role === 'owner' ? 'Proprietaire' : 'Admin'}
+                          {member.role === 'owner' ? 'Propriétaire' : 'Admin'}
                         </Badge>
                       ) : (
                         <Select
@@ -829,9 +829,9 @@ export function SettingsPage() {
     <AnimatedPage className="p-6 space-y-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Parametres</h1>
+        <h1 className="text-2xl font-bold text-foreground">Paramètres</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Configurez votre espace de travail et gerez votre equipe.
+          Configurez votre espace de travail et gérez votre équipe.
         </p>
       </div>
 
@@ -844,7 +844,7 @@ export function SettingsPage() {
           </TabsTrigger>
           <TabsTrigger value="equipe" className="gap-1.5">
             <Users className="h-4 w-4" />
-            Equipe
+            Équipe
           </TabsTrigger>
         </TabsList>
 

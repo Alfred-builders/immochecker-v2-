@@ -31,7 +31,7 @@ const TYPE_BADGE_CLASSES: Record<string, string> = {
 const columns: Column<Batiment>[] = [
   {
     id: 'designation',
-    header: 'Designation',
+    header: 'Désignation',
     accessorFn: (row) => row.designation,
     cell: (value) => (
       <span className="font-medium text-foreground">{String(value)}</span>
@@ -76,7 +76,7 @@ const columns: Column<Batiment>[] = [
   },
   {
     id: 'reference_interne',
-    header: 'Ref. interne',
+    header: 'Réf. interne',
     accessorFn: (row) => row.reference_interne ?? '',
     cell: (value) => (
       <span className="text-muted-foreground">{String(value)}</span>
@@ -104,7 +104,7 @@ const filterFields: FilterField[] = [
   },
   {
     id: 'est_archive',
-    label: 'Archive',
+    label: 'Archivé',
     type: 'boolean',
   },
 ];
@@ -135,7 +135,7 @@ export function PatrimoinePage() {
             Parc immobilier
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Gerez vos batiments, lots et equipements.
+            Gérez vos bâtiments, lots et équipements.
           </p>
         </div>
 
@@ -164,7 +164,7 @@ export function PatrimoinePage() {
             onClick={() => setBuildingOpen(true)}
           >
             <Plus className="h-4 w-4" />
-            Nouveau batiment
+            Nouveau bâtiment
           </Button>
         </div>
       </div>
@@ -175,7 +175,7 @@ export function PatrimoinePage() {
         data={tableData}
         loading={isLoading}
         pageId="patrimoine"
-        searchPlaceholder="Rechercher par designation ou adresse..."
+        searchPlaceholder="Rechercher par désignation ou adresse..."
         onSearch={setSearch}
         searchValue={search}
         filterFields={filterFields}
@@ -183,7 +183,7 @@ export function PatrimoinePage() {
         emptyIcon={
           <Building2 className="h-10 w-10 text-muted-foreground/40" />
         }
-        emptyMessage="Aucun batiment pour le moment"
+        emptyMessage="Aucun bâtiment pour le moment"
       />
 
       {/* Dialogs */}

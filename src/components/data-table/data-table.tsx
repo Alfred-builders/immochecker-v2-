@@ -86,7 +86,7 @@ export function DataTable<T>({
   filterFields,
   actions,
   emptyIcon,
-  emptyMessage = 'Aucun resultat',
+  emptyMessage = 'Aucun résultat',
 }: DataTableProps<T>) {
   // --- Search with debounce ---
   const [internalSearch, setInternalSearch] = useState('');

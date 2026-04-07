@@ -84,7 +84,7 @@ export function LoginPage() {
       await switchWorkspace(selectedWorkspace);
       navigate('/app');
     } catch (err) {
-      toast.error('Impossible de selectionner ce workspace');
+      toast.error('Impossible de sélectionner ce workspace');
     } finally {
       setIsSubmitting(false);
     }
@@ -104,7 +104,7 @@ export function LoginPage() {
             <span className="text-[#2563eb]">Checker</span>
           </div>
           <CardDescription className="text-sm text-muted-foreground">
-            Gestion d'etats des lieux simplifiee
+            Gestion d'états des lieux simplifiée
           </CardDescription>
         </CardHeader>
 
@@ -118,7 +118,7 @@ export function LoginPage() {
                 onValueChange={setSelectedWorkspace}
               >
                 <SelectTrigger className="bg-[#f8fafc] border-[#e2e8f0]">
-                  <SelectValue placeholder="Selectionner un workspace" />
+                  <SelectValue placeholder="Sélectionner un workspace" />
                 </SelectTrigger>
                 <SelectContent>
                   {workspaces.map((ws) => (
@@ -199,7 +199,7 @@ export function LoginPage() {
               to="/register"
               className="font-medium text-[#2563eb] hover:underline"
             >
-              Creer un compte
+              Créer un compte
             </Link>
           </p>
         </CardFooter>

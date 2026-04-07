@@ -73,7 +73,7 @@ const adresseSchema = z.object({
 });
 
 const schema = z.object({
-  designation: z.string().min(1, 'Designation requise'),
+  designation: z.string().min(1, 'Désignation requise'),
   type: z.string().min(1, 'Type requis'),
   num_batiment: z.string().optional(),
   nb_etages: z.coerce.number().int().nonnegative().optional().or(z.literal('')),
@@ -145,7 +145,7 @@ function SuccessCheck() {
       className="flex items-center gap-2 text-emerald-600"
     >
       <Check className="h-5 w-5" />
-      <span className="text-sm font-medium">Sauvegarde</span>
+      <span className="text-sm font-medium">Sauvegardé</span>
     </motion.div>
   );
 }
@@ -226,14 +226,14 @@ export function BatimentDetailPage() {
     await updateBatiment.mutateAsync(payload);
     setEditing(false);
     setShowSuccess(true);
-    toast.success('Batiment mis a jour');
+    toast.success('Bâtiment mis à jour');
     setTimeout(() => setShowSuccess(false), 2000);
   }
 
   async function handleArchive() {
     if (!id) return;
     await archiveBatiment.mutateAsync(id);
-    toast.success('Batiment archive');
+    toast.success('Bâtiment archivé');
     navigate('/app/patrimoine');
   }
 
@@ -274,7 +274,7 @@ export function BatimentDetailPage() {
   if (!batiment) {
     return (
       <AnimatedPage className="p-6">
-        <p className="text-muted-foreground">Batiment introuvable.</p>
+        <p className="text-muted-foreground">Bâtiment introuvable.</p>
       </AnimatedPage>
     );
   }
@@ -380,14 +380,14 @@ export function BatimentDetailPage() {
                   className="divide-y"
                 >
                   <InfoRow label="Type" value={typeBadge} />
-                  <InfoRow label="N° batiment" value={batiment.num_batiment} />
-                  <InfoRow label="Nb etages" value={batiment.nb_etages} />
+                  <InfoRow label="N° bâtiment" value={batiment.num_batiment} />
+                  <InfoRow label="Nb étages" value={batiment.nb_etages} />
                   <InfoRow
-                    label="Annee construction"
+                    label="Année construction"
                     value={batiment.annee_construction}
                   />
                   <InfoRow
-                    label="Ref. interne"
+                    label="Réf. interne"
                     value={batiment.reference_interne}
                   />
                   <InfoRow label="Commentaire" value={batiment.commentaire} />
@@ -406,7 +406,7 @@ export function BatimentDetailPage() {
                     name="designation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Designation</FormLabel>
+                        <FormLabel>Désignation</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
@@ -447,7 +447,7 @@ export function BatimentDetailPage() {
                       name="num_batiment"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>N° batiment</FormLabel>
+                          <FormLabel>N° bâtiment</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -459,7 +459,7 @@ export function BatimentDetailPage() {
                       name="nb_etages"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nb etages</FormLabel>
+                          <FormLabel>Nb étages</FormLabel>
                           <FormControl>
                             <Input type="number" {...field} />
                           </FormControl>
@@ -473,7 +473,7 @@ export function BatimentDetailPage() {
                       name="annee_construction"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Annee construction</FormLabel>
+                          <FormLabel>Année construction</FormLabel>
                           <FormControl>
                             <Input type="number" {...field} />
                           </FormControl>
@@ -485,7 +485,7 @@ export function BatimentDetailPage() {
                       name="reference_interne"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Ref. interne</FormLabel>
+                          <FormLabel>Réf. interne</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -660,7 +660,7 @@ export function BatimentDetailPage() {
                             <FormItem>
                               <FormControl>
                                 <Input
-                                  placeholder="Complement"
+                                  placeholder="Complément"
                                   className="h-8 text-sm"
                                   {...f}
                                 />
@@ -732,11 +732,11 @@ export function BatimentDetailPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Designation</TableHead>
+                <TableHead>Désignation</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Etage</TableHead>
+                <TableHead>Étage</TableHead>
                 <TableHead className="text-right">Surface</TableHead>
-                <TableHead>Meuble</TableHead>
+                <TableHead>Meublé</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -772,7 +772,7 @@ export function BatimentDetailPage() {
                     {lot.etage ?? '--'}
                   </td>
                   <td className="p-4 text-sm text-right tabular-nums">
-                    {lot.surface ? `${lot.surface} m2` : '--'}
+                    {lot.surface ? `${lot.surface} m²` : '--'}
                   </td>
                   <td className="p-4 text-sm">
                     {lot.meuble ? (
@@ -794,7 +794,7 @@ export function BatimentDetailPage() {
                     colSpan={5}
                     className="text-center py-8 text-sm text-muted-foreground"
                   >
-                    Aucun lot dans ce batiment
+                    Aucun lot dans ce bâtiment
                   </TableCell>
                 </TableRow>
               )}
@@ -807,10 +807,10 @@ export function BatimentDetailPage() {
       <Dialog open={archiveOpen} onOpenChange={setArchiveOpen}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle>Archiver ce batiment ?</DialogTitle>
+            <DialogTitle>Archiver ce bâtiment ?</DialogTitle>
             <DialogDescription>
-              Le batiment et ses lots ne seront plus visibles dans la liste
-              principale. Cette action est reversible.
+              Le bâtiment et ses lots ne seront plus visibles dans la liste
+              principale. Cette action est réversible.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
