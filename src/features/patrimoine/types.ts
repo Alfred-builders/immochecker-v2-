@@ -24,8 +24,13 @@ export interface Batiment {
   est_archive: boolean;
   created_at: string;
   updated_at: string;
-  adresse_principale?: string;
+  adresse_principale?: { rue: string; complement?: string; code_postal: string; ville: string } | null;
   nb_lots: number;
+}
+
+export function formatAdresse(addr?: { rue?: string; code_postal?: string; ville?: string } | null): string {
+  if (!addr) return '';
+  return [addr.rue, addr.code_postal, addr.ville].filter(Boolean).join(', ');
 }
 
 export interface BatimentDetail extends Batiment {
@@ -52,7 +57,7 @@ export interface Lot {
   created_at: string;
   updated_at: string;
   batiment_designation?: string;
-  adresse_principale?: string;
+  adresse_principale?: { rue: string; complement?: string; code_postal: string; ville: string } | null;
 }
 
 export interface LotDetail extends Lot {

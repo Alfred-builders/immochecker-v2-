@@ -42,7 +42,10 @@ export function useBatiments(params?: BatimentsParams) {
 export function useBatiment(id: string | undefined) {
   return useQuery({
     queryKey: keys.batiment(id!),
-    queryFn: () => apiGet<BatimentDetail>(`/batiments/${id}`),
+    queryFn: async () => {
+      const res = await apiGet<{ batiment: BatimentDetail }>(`/batiments/${id}`);
+      return res.batiment;
+    },
     enabled: !!id,
   });
 }
@@ -124,7 +127,10 @@ export function useLots(params?: LotsParams) {
 export function useLot(id: string | undefined) {
   return useQuery({
     queryKey: keys.lot(id!),
-    queryFn: () => apiGet<LotDetail>(`/lots/${id}`),
+    queryFn: async () => {
+      const res = await apiGet<{ lot: LotDetail }>(`/lots/${id}`);
+      return res.lot;
+    },
     enabled: !!id,
   });
 }

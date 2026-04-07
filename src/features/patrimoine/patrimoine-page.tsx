@@ -11,7 +11,7 @@ import { useBatiments } from './api';
 import { CreateBuildingDialog } from './create-building-dialog';
 import { CreateHouseDialog } from './create-house-dialog';
 import { ImportCSVDialog } from './import-csv-dialog';
-import type { Batiment } from './types';
+import { formatAdresse, type Batiment } from './types';
 
 // ---------------------------------------------------------------------------
 // Badge color map
@@ -60,7 +60,7 @@ const columns: Column<Batiment>[] = [
   {
     id: 'adresse_principale',
     header: 'Adresse',
-    accessorFn: (row) => row.adresse_principale ?? '',
+    accessorFn: (row) => formatAdresse(row.adresse_principale),
     sortable: true,
     minWidth: 200,
   },
