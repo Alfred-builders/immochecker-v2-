@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "dev:server": "node --watch server/index.js",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && cd server && npm install --production",
     "preview": "vite preview",
     "migrate": "node server/db/migrate.js",
     "start": "node server/index.js"
