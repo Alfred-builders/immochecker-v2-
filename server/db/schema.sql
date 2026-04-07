@@ -134,6 +134,65 @@ CREATE TABLE IF NOT EXISTS imv2_lot (
 );
 
 -- ============================================
+-- TIERS (US588–593, US806–810)
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS imv2_tiers (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id UUID NOT NULL REFERENCES imv2_workspace(id) ON DELETE CASCADE,
+  type VARCHAR(20) NOT NULL CHECK (type IN ('personne_physique', 'personne_morale')),
+  -- Common fields
+  email VARCHAR(255),
+  telephone VARCHAR(20),
+  telephone2 VARCHAR(20),
+  adresse TEXT,
+  code_postal VARCHAR(10),
+  ville VARCHAR(100),
+  notes TEXT,
+  commentaire TEXT,
+  reference_interne VARCHAR(50),
+  est_archive BOOLEAN NOT NULL DEFAULT false,
+  -- PP-specific fields
+  civilite VARCHAR(10),
+  nom VARCHAR(255),
+  prenom VARCHAR(255),
+  date_naissance DATE,
+  -- PM-specific fields
+  raison_sociale VARCHAR(255),
+  siret VARCHAR(14),
+  forme_juridique VARCHAR(50),
+  representant_nom VARCHAR(255),
+  representant_prenom VARCHAR(255),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Link PP to PM (US589)
+CREATE TABLE IF NOT EXISTS imv2_tiers_organisation (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  personne_id UUID NOT NULL REFERENCES imv2_tiers(id) ON DELETE CASCADE,
+  organisation_id UUID NOT NULL REFERENCES imv2_tiers(id) ON DELETE CASCADE,
+  fonction VARCHAR(100),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(personne_id, organisation_id)
+);
+
+-- Link tiers to lots with role (US590, US591)
+CREATE TABLE IF NOT EXISTS imv2_lot_tiers (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  lot_id UUID NOT NULL REFERENCES imv2_lot(id) ON DELETE CASCADE,
+  tiers_id UUID NOT NULL REFERENCES imv2_tiers(id) ON DELETE CASCADE,
+  role VARCHAR(20) NOT NULL CHECK (role IN ('proprietaire', 'locataire', 'mandataire')),
+  quote_part NUMERIC(5,2),
+  date_debut DATE,
+  date_fin DATE,
+  est_principal BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(lot_id, tiers_id, role)
+);
+
+-- ============================================
 -- ARCHIVE LOG (US582 — cold archiving audit)
 -- ============================================
 
@@ -164,3 +223,11 @@ CREATE INDEX IF NOT EXISTS idx_imv2_lot_ws ON imv2_lot(workspace_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_lot_archive ON imv2_lot(workspace_id, est_archive);
 CREATE INDEX IF NOT EXISTS idx_imv2_archive_log_entity ON imv2_archive_log(entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_user_pref ON imv2_user_preference(user_id, page);
+CREATE INDEX IF NOT EXISTS idx_imv2_tiers_ws ON imv2_tiers(workspace_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_tiers_type ON imv2_tiers(workspace_id, type);
+CREATE INDEX IF NOT EXISTS idx_imv2_tiers_archive ON imv2_tiers(workspace_id, est_archive);
+CREATE INDEX IF NOT EXISTS idx_imv2_tiers_org_pp ON imv2_tiers_organisation(personne_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_tiers_org_pm ON imv2_tiers_organisation(organisation_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_lot_tiers_lot ON imv2_lot_tiers(lot_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_lot_tiers_tiers ON imv2_lot_tiers(tiers_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_lot_tiers_role ON imv2_lot_tiers(lot_id, role);

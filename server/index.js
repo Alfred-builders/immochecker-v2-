@@ -18,6 +18,7 @@ import preferenceRoutes from './routes/preferences.js';
 import batimentsRoutes from './routes/batiments.js';
 import lotsRoutes from './routes/lots.js';
 import importRoutes from './routes/import.js';
+import tiersRoutes from './routes/tiers.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -40,6 +41,7 @@ app.use('/api/preferences', verifyToken, preferenceRoutes);
 app.use('/api/batiments', verifyToken, batimentsRoutes);
 app.use('/api/lots', verifyToken, lotsRoutes);
 app.use('/api/import', verifyToken, importRoutes);
+app.use('/api/tiers', verifyToken, tiersRoutes);
 
 // ─── 404 catch-all for /api/* ───────────────────────────────────
 app.all('/api/*', (_req, res) => {

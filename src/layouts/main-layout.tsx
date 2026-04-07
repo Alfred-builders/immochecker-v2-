@@ -8,8 +8,6 @@ import {
   Calendar,
   LayoutDashboard,
   Settings,
-  ChevronLeft,
-  ChevronRight,
   LogOut,
   User,
   ChevronDown,
@@ -22,7 +20,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
@@ -66,7 +63,8 @@ const WORKSPACE_TYPE_LABELS: Record<string, string> = {
 };
 
 export function MainLayout() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const collapsed = !hovered;
   const { user, workspace, logout } = useAuth();
   const location = useLocation();
 
@@ -86,12 +84,17 @@ export function MainLayout() {
   return (
     <TooltipProvider delayDuration={200}>
       <div className="flex h-screen overflow-hidden bg-[#f1f5f9]">
-        {/* Sidebar */}
+        {/* Sidebar spacer — always collapsed width */}
+        <div className="w-[72px] shrink-0" />
+
+        {/* Sidebar — overlays content on hover */}
         <motion.aside
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
           initial={false}
           animate={{ width: collapsed ? 72 : 260 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
-          className="relative flex flex-col border-r border-[#e2e8f0] bg-white"
+          className="fixed left-0 top-0 z-30 flex h-screen flex-col border-r border-[#e2e8f0] bg-white shadow-lg"
         >
           {/* Workspace header */}
           <div className="flex h-16 items-center gap-3 border-b border-[#e2e8f0] px-4">
@@ -211,18 +214,6 @@ export function MainLayout() {
               </div>
             ))}
           </nav>
-
-          {/* Collapse toggle */}
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="absolute -right-3 top-20 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-[#e2e8f0] bg-white shadow-sm transition-colors hover:bg-[#f8fafc]"
-          >
-            {collapsed ? (
-              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-            ) : (
-              <ChevronLeft className="h-3.5 w-3.5 text-muted-foreground" />
-            )}
-          </button>
 
           {/* Footer: user info */}
           <div className="border-t border-[#e2e8f0] p-3">
