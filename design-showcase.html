@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ImmoChecker V2 — Design Proposals</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Satoshi', -apple-system, sans-serif;
+      background: #0a0a0a;
+      color: #fafafa;
+      overflow-x: hidden;
+    }
+
+    /* ============================================ */
+    /* HEADER                                       */
+    /* ============================================ */
+    .showcase-header {
+      text-align: center;
+      padding: 80px 40px 60px;
+      background: linear-gradient(180deg, #111 0%, #0a0a0a 100%);
+    }
+    .showcase-header h1 {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+    .showcase-header p {
+      font-size: 18px;
+      color: #888;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ============================================ */
+    /* OPTION SELECTOR                              */
+    /* ============================================ */
+    .option-nav {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 20px 40px;
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,10,0.9);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      border-bottom: 1px solid #222;
+    }
+    .option-nav a {
+      padding: 12px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+    .option-nav a.opt-a { background: #1e3a5f; color: #60a5fa; border: 1px solid #2563eb33; }
+    .option-nav a.opt-b { background: #3d2e0a; color: #fbbf24; border: 1px solid #f59e0b33; }
+    .option-nav a.opt-c { background: #1a1a2e; color: #a78bfa; border: 1px solid #7c3aed33; }
+    .option-nav a:hover { transform: translateY(-2px); }
+
+    /* ============================================ */
+    /* OPTION SECTIONS                              */
+    /* ============================================ */
+    .option-section {
+      padding: 80px 60px;
+      border-top: 1px solid #1a1a1a;
+    }
+    .option-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .option-subtitle {
+      font-size: 16px;
+      color: #888;
+      margin-bottom: 40px;
+      max-width: 700px;
+    }
+    .option-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .screens-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 40px;
+    }
+    .screen-card {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #222;
+    }
+    .screen-card.full { grid-column: 1 / -1; }
+    .screen-label {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #222;
+      background: #111;
+      color: #666;
+    }
+
+    /* Color palette display */
+    .palette {
+      display: flex;
+      gap: 12px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+    }
+    .palette-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .palette-swatch {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      border: 1px solid #333;
+    }
+    .palette-name {
+      font-size: 11px;
+      color: #888;
+    }
+
+    .typo-sample {
+      margin: 24px 0;
+      padding: 24px;
+      background: #111;
+      border-radius: 12px;
+      border: 1px solid #222;
+    }
+    .typo-sample h3 {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .typo-sample p {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 15px;
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    /* ============================================ */
+    /* OPTION A — MINIMAL PRO (Blue/White)          */
+    /* ============================================ */
+    .mockup-a-login {
+      background: #f8fafc;
+      padding: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 500px;
+    }
+    .a-login-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 48px;
+      width: 420px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .a-login-card .logo {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .a-login-card .logo span { color: #2563eb; }
+    .a-login-card .tagline {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 32px;
+    }
+    .a-field {
+      margin-bottom: 16px;
+    }
+    .a-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .a-field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Satoshi', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      outline: none;
+    }
+    .a-field input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .a-btn-primary {
+      width: 100%;
+      padding: 11px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Satoshi', sans-serif;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .a-link { font-size: 13px; color: #2563eb; text-decoration: none; margin-top: 16px; display: block; text-align: center; }
+
+    /* Option A — Main Layout */
+    .mockup-a-main {
+      background: #f1f5f9;
+      display: flex;
+      min-height: 520px;
+    }
+    .a-sidebar {
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid #e2e8f0;
+      padding: 20px 0;
+      flex-shrink: 0;
+    }
+    .a-sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 12px;
+    }
+    .a-sidebar-header .ws-name {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .a-sidebar-header .ws-type {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .a-nav-group {
+      padding: 0 12px;
+      margin-bottom: 20px;
+    }
+    .a-nav-group-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 8px;
+      margin-bottom: 6px;
+    }
+    .a-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #475569;
+      cursor: pointer;
+    }
+    .a-nav-item.active {
+      background: #eff6ff;
+      color: #2563eb;
+      font-weight: 500;
+    }
+    .a-nav-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      flex-shrink: 0;
+    }
+    .a-nav-item.active .a-nav-icon { background: #bfdbfe; }
+    .a-content {
+      flex: 1;
+      padding: 24px 32px;
+    }
+    .a-breadcrumb {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+    .a-breadcrumb span { color: #0f172a; font-weight: 500; }
+    .a-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .a-page-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .a-page-actions { display: flex; gap: 8px; }
+    .a-btn-sm {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      color: #334155;
+      cursor: pointer;
+      font-family: 'Satoshi', sans-serif;
+    }
+    .a-btn-sm.primary { background: #2563eb; color: #fff; border-color: #2563eb; }
+    .a-toolbar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .a-search {
+      flex: 1;
+      max-width: 320px;
+      padding: 8px 12px 8px 36px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 13px;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2394a3b8'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") 12px center no-repeat;
+      font-family: 'Satoshi', sans-serif;
+      color: #0f172a;
+    }
+    .a-filter-btn {
+      padding: 8px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 13px;
+      background: #fff;
+      color: #64748b;
+      cursor: pointer;
+      font-family: 'Satoshi', sans-serif;
+    }
+    .a-table {
+      width: 100%;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+    .a-table th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .a-table td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #334155;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .a-table tr:last-child td { border-bottom: none; }
+    .a-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .a-badge.immeuble { background: #eff6ff; color: #2563eb; }
+    .a-badge.maison { background: #f0fdf4; color: #16a34a; }
+    .a-badge.commercial { background: #fefce8; color: #ca8a04; }
+
+    /* ============================================ */
+    /* OPTION B — WARM ESTATE (Amber/Dark)          */
+    /* ============================================ */
+    .mockup-b-login {
+      background: linear-gradient(135deg, #1c1917 0%, #292524 100%);
+      padding: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 500px;
+    }
+    .b-login-card {
+      background: #1c1917;
+      border: 1px solid #44403c;
+      border-radius: 20px;
+      padding: 48px;
+      width: 420px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    }
+    .b-login-card .logo {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #fafaf9;
+      margin-bottom: 4px;
+    }
+    .b-login-card .logo span { color: #f59e0b; }
+    .b-login-card .tagline {
+      font-size: 14px;
+      color: #78716c;
+      margin-bottom: 36px;
+    }
+    .b-field {
+      margin-bottom: 16px;
+    }
+    .b-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #a8a29e;
+      margin-bottom: 6px;
+    }
+    .b-field input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #44403c;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Satoshi', sans-serif;
+      background: #292524;
+      color: #fafaf9;
+      outline: none;
+    }
+    .b-field input:focus { border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.15); }
+    .b-btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #1c1917;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Satoshi', sans-serif;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .b-link { font-size: 13px; color: #f59e0b; text-decoration: none; margin-top: 16px; display: block; text-align: center; }
+    .b-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      font-size: 12px;
+      color: #57534e;
+    }
+    .b-divider::before, .b-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #44403c;
+    }
+
+    /* Option B — Main Layout */
+    .mockup-b-main {
+      background: #1c1917;
+      display: flex;
+      min-height: 520px;
+    }
+    .b-sidebar {
+      width: 270px;
+      background: #292524;
+      border-right: 1px solid #44403c;
+      padding: 20px 0;
+      flex-shrink: 0;
+    }
+    .b-sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid #3a3633;
+      margin-bottom: 12px;
+    }
+    .b-sidebar-header .ws-name {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: #fafaf9;
+    }
+    .b-sidebar-header .ws-type {
+      font-size: 12px;
+      color: #78716c;
+    }
+    .b-sidebar-header .ws-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 700;
+      color: #1c1917;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .b-nav-group { padding: 0 12px; margin-bottom: 20px; }
+    .b-nav-group-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #78716c;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 8px;
+      margin-bottom: 6px;
+    }
+    .b-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #a8a29e;
+      cursor: pointer;
+    }
+    .b-nav-item.active {
+      background: rgba(245,158,11,0.1);
+      color: #f59e0b;
+      font-weight: 500;
+    }
+    .b-nav-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      background: #44403c;
+      flex-shrink: 0;
+    }
+    .b-nav-item.active .b-nav-icon { background: rgba(245,158,11,0.25); }
+    .b-content {
+      flex: 1;
+      padding: 24px 32px;
+    }
+    .b-breadcrumb {
+      font-size: 13px;
+      color: #78716c;
+      margin-bottom: 20px;
+    }
+    .b-breadcrumb span { color: #fafaf9; font-weight: 500; }
+    .b-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .b-page-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: #fafaf9;
+    }
+    .b-stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .b-stat-card {
+      background: #292524;
+      border: 1px solid #44403c;
+      border-radius: 12px;
+      padding: 16px 20px;
+      flex: 1;
+    }
+    .b-stat-value {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #fafaf9;
+    }
+    .b-stat-label {
+      font-size: 13px;
+      color: #78716c;
+      margin-top: 2px;
+    }
+    .b-stat-card.accent { border-color: rgba(245,158,11,0.3); }
+    .b-stat-card.accent .b-stat-value { color: #f59e0b; }
+    .b-table {
+      width: 100%;
+      background: #292524;
+      border-radius: 12px;
+      border: 1px solid #44403c;
+      overflow: hidden;
+    }
+    .b-table th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #78716c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #1c1917;
+      border-bottom: 1px solid #44403c;
+    }
+    .b-table td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #d6d3d1;
+      border-bottom: 1px solid #3a3633;
+    }
+    .b-table tr:last-child td { border-bottom: none; }
+    .b-table tr:hover td { background: rgba(245,158,11,0.04); }
+    .b-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .b-badge.immeuble { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .b-badge.maison { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .b-badge.commercial { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .b-toolbar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .b-search {
+      flex: 1;
+      max-width: 320px;
+      padding: 9px 14px 9px 36px;
+      border: 1px solid #44403c;
+      border-radius: 10px;
+      font-size: 13px;
+      background: #292524;
+      font-family: 'Satoshi', sans-serif;
+      color: #fafaf9;
+    }
+    .b-btn-sm {
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid #44403c;
+      background: #292524;
+      color: #a8a29e;
+      cursor: pointer;
+      font-family: 'Satoshi', sans-serif;
+    }
+    .b-btn-sm.primary {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #1c1917;
+      border-color: #f59e0b;
+      font-weight: 700;
+    }
+
+    /* ============================================ */
+    /* OPTION C — MODERN SLATE (Purple/Indigo)      */
+    /* ============================================ */
+    .mockup-c-login {
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      padding: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 500px;
+      position: relative;
+      overflow: hidden;
+    }
+    .mockup-c-login::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+    }
+    .mockup-c-login::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+      bottom: -50px;
+      left: -50px;
+    }
+    .c-login-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 48px;
+      width: 420px;
+      backdrop-filter: blur(20px);
+      position: relative;
+      z-index: 1;
+    }
+    .c-login-card .logo {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 4px;
+    }
+    .c-login-card .logo span {
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .c-login-card .tagline {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 36px;
+    }
+    .c-field { margin-bottom: 16px; }
+    .c-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .c-field input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: 'Satoshi', sans-serif;
+      background: rgba(255,255,255,0.04);
+      color: #f1f5f9;
+      outline: none;
+    }
+    .c-field input:focus {
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+    }
+    .c-btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Satoshi', sans-serif;
+      cursor: pointer;
+      margin-top: 8px;
+      position: relative;
+    }
+    .c-btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(124,58,237,0.3);
+      pointer-events: none;
+    }
+    .c-link { font-size: 13px; color: #7c3aed; text-decoration: none; margin-top: 16px; display: block; text-align: center; }
+
+    /* Option C — Main Layout */
+    .mockup-c-main {
+      background: #0f0f23;
+      display: flex;
+      min-height: 520px;
+    }
+    .c-sidebar {
+      width: 260px;
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+      flex-shrink: 0;
+    }
+    .c-sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 12px;
+    }
+    .c-sidebar-header .ws-name {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+    .c-sidebar-header .ws-type {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .c-sidebar-header .ws-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 700;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .c-nav-group { padding: 0 12px; margin-bottom: 20px; }
+    .c-nav-group-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 8px;
+      margin-bottom: 6px;
+    }
+    .c-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #94a3b8;
+      cursor: pointer;
+    }
+    .c-nav-item.active {
+      background: rgba(124,58,237,0.1);
+      color: #a78bfa;
+      font-weight: 500;
+    }
+    .c-nav-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+    .c-nav-item.active .c-nav-icon { background: rgba(124,58,237,0.25); }
+    .c-content {
+      flex: 1;
+      padding: 24px 32px;
+    }
+    .c-breadcrumb {
+      font-size: 13px;
+      color: #475569;
+      margin-bottom: 20px;
+    }
+    .c-breadcrumb span { color: #f1f5f9; font-weight: 500; }
+    .c-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .c-page-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+    .c-stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .c-stat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 16px 20px;
+      flex: 1;
+      backdrop-filter: blur(10px);
+    }
+    .c-stat-value {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+    .c-stat-label {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+    .c-stat-card.accent { border-color: rgba(124,58,237,0.3); }
+    .c-stat-card.accent .c-stat-value { color: #a78bfa; }
+    .c-table {
+      width: 100%;
+      background: rgba(255,255,255,0.02);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .c-table th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .c-table td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #cbd5e1;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .c-table tr:last-child td { border-bottom: none; }
+    .c-table tr:hover td { background: rgba(124,58,237,0.04); }
+    .c-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .c-badge.immeuble { background: rgba(124,58,237,0.15); color: #a78bfa; }
+    .c-badge.maison { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .c-badge.commercial { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .c-toolbar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .c-search {
+      flex: 1;
+      max-width: 320px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      font-size: 13px;
+      background: rgba(255,255,255,0.04);
+      font-family: 'Satoshi', sans-serif;
+      color: #f1f5f9;
+    }
+    .c-btn-sm {
+      padding: 9px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: #94a3b8;
+      cursor: pointer;
+      font-family: 'Satoshi', sans-serif;
+    }
+    .c-btn-sm.primary {
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      color: #fff;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    /* ============================================ */
+    /* DETAIL PAGE MOCKUPS                          */
+    /* ============================================ */
+    .mockup-a-detail {
+      background: #f1f5f9;
+      padding: 32px;
+      min-height: 420px;
+    }
+    .a-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .a-detail-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .a-detail-subtitle { font-size: 14px; color: #64748b; margin-top: 4px; }
+    .a-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .a-detail-section {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .a-detail-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .a-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+    .a-detail-row .label { color: #64748b; }
+    .a-detail-row .value { color: #0f172a; font-weight: 500; }
+
+    .mockup-b-detail {
+      background: #1c1917;
+      padding: 32px;
+      min-height: 420px;
+    }
+    .b-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #44403c;
+    }
+    .b-detail-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #fafaf9;
+    }
+    .b-detail-subtitle { font-size: 14px; color: #78716c; margin-top: 4px; }
+    .b-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .b-detail-section {
+      background: #292524;
+      border: 1px solid #44403c;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .b-detail-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fafaf9;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #3a3633;
+    }
+    .b-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+    .b-detail-row .label { color: #78716c; }
+    .b-detail-row .value { color: #d6d3d1; font-weight: 500; }
+
+    .mockup-c-detail {
+      background: #0f0f23;
+      padding: 32px;
+      min-height: 420px;
+    }
+    .c-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .c-detail-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+    .c-detail-subtitle { font-size: 14px; color: #64748b; margin-top: 4px; }
+    .c-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .c-detail-section {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .c-detail-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .c-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+    .c-detail-row .label { color: #64748b; }
+    .c-detail-row .value { color: #cbd5e1; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="showcase-header">
+    <h1>ImmoChecker V2</h1>
+    <p>3 propositions de design pour l'application de gestion d'etats des lieux</p>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="option-nav">
+    <a href="#option-a" class="opt-a">A — Minimal Pro</a>
+    <a href="#option-b" class="opt-b">B — Warm Estate</a>
+    <a href="#option-c" class="opt-c">C — Modern Slate</a>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- OPTION A — MINIMAL PRO                           -->
+  <!-- ================================================ -->
+  <div id="option-a" class="option-section">
+    <div class="option-tag" style="background: #1e3a5f; color: #60a5fa;">Option A</div>
+    <div class="option-title">Minimal Pro</div>
+    <div class="option-subtitle">
+      Design epure, fond blanc, accents bleu professionnel. Inspire de Linear et Notion.
+      Ideal pour un outil metier ou la lisibilite prime.
+    </div>
+
+    <div class="palette">
+      <div class="palette-item"><div class="palette-swatch" style="background:#2563eb"></div><div class="palette-name">Primary</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#0f172a"></div><div class="palette-name">Foreground</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#f8fafc"></div><div class="palette-name">Background</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#f1f5f9"></div><div class="palette-name">Muted</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#e2e8f0"></div><div class="palette-name">Border</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#ef4444"></div><div class="palette-name">Destructive</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#16a34a"></div><div class="palette-name">Success</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#f59e0b"></div><div class="palette-name">Warning</div></div>
+    </div>
+
+    <div class="typo-sample" style="background: #fff; border-color: #e2e8f0;">
+      <h3 style="color: #0f172a;">Clash Display — Titres et headings</h3>
+      <p style="color: #475569;">Satoshi — Corps de texte, labels, descriptions. La lisibilite est optimale avec cette combinaison de polices modernes et geometriques.</p>
+    </div>
+
+    <div class="screens-grid">
+      <!-- Login -->
+      <div class="screen-card">
+        <div class="screen-label">Page de connexion</div>
+        <div class="mockup-a-login">
+          <div class="a-login-card">
+            <div class="logo">Immo<span>Checker</span></div>
+            <div class="tagline">Gestion d'etats des lieux simplifiee</div>
+            <div class="a-field">
+              <label>Adresse email</label>
+              <input type="text" value="jean.dupont@agence.fr" />
+            </div>
+            <div class="a-field">
+              <label>Mot de passe</label>
+              <input type="password" value="********" />
+            </div>
+            <button class="a-btn-primary">Se connecter</button>
+            <a class="a-link">Creer un compte</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail -->
+      <div class="screen-card">
+        <div class="screen-label">Fiche batiment</div>
+        <div class="mockup-a-detail">
+          <div class="a-detail-header">
+            <div>
+              <div class="a-detail-title">Residence Les Lilas</div>
+              <div class="a-detail-subtitle">12 rue des Lilas, 75020 Paris</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="a-btn-sm">Modifier</button>
+              <button class="a-btn-sm primary">+ Ajouter un lot</button>
+            </div>
+          </div>
+          <div class="a-detail-grid">
+            <div class="a-detail-section">
+              <h3>Informations</h3>
+              <div class="a-detail-row"><span class="label">Type</span><span class="value"><span class="a-badge immeuble">Immeuble</span></span></div>
+              <div class="a-detail-row"><span class="label">Reference</span><span class="value">BAT-2024-042</span></div>
+              <div class="a-detail-row"><span class="label">Annee construction</span><span class="value">1992</span></div>
+              <div class="a-detail-row"><span class="label">Nombre de lots</span><span class="value">24</span></div>
+            </div>
+            <div class="a-detail-section">
+              <h3>Adresses</h3>
+              <div class="a-detail-row"><span class="label">Principale</span><span class="value">12 rue des Lilas</span></div>
+              <div class="a-detail-row"><span class="label">Code postal</span><span class="value">75020</span></div>
+              <div class="a-detail-row"><span class="label">Ville</span><span class="value">Paris</span></div>
+              <div class="a-detail-row"><span class="label">Secondaire</span><span class="value">14 rue des Lilas</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout (full width) -->
+      <div class="screen-card full">
+        <div class="screen-label">Parc immobilier — Liste des batiments</div>
+        <div class="mockup-a-main">
+          <div class="a-sidebar">
+            <div class="a-sidebar-header">
+              <div class="ws-name">EDL Express Paris</div>
+              <div class="ws-type">Societe d'EDL</div>
+            </div>
+            <div class="a-nav-group">
+              <div class="a-nav-group-title">Referentiel</div>
+              <div class="a-nav-item active"><div class="a-nav-icon"></div> Parc immobilier</div>
+              <div class="a-nav-item"><div class="a-nav-icon"></div> Tiers</div>
+              <div class="a-nav-item"><div class="a-nav-icon"></div> Templates</div>
+            </div>
+            <div class="a-nav-group">
+              <div class="a-nav-group-title">Operationnel</div>
+              <div class="a-nav-item"><div class="a-nav-icon"></div> Missions</div>
+              <div class="a-nav-item"><div class="a-nav-icon"></div> Tableau de bord</div>
+            </div>
+            <div class="a-nav-group">
+              <div class="a-nav-group-title">Administration</div>
+              <div class="a-nav-item"><div class="a-nav-icon"></div> Parametres</div>
+            </div>
+          </div>
+          <div class="a-content">
+            <div class="a-breadcrumb">Referentiel / <span>Parc immobilier</span></div>
+            <div class="a-page-header">
+              <div class="a-page-title">Parc immobilier</div>
+              <div class="a-page-actions">
+                <button class="a-btn-sm">Importer CSV</button>
+                <button class="a-btn-sm primary">+ Nouveau batiment</button>
+              </div>
+            </div>
+            <div class="a-toolbar">
+              <input class="a-search" placeholder="Rechercher un batiment, une adresse..." />
+              <button class="a-filter-btn">+ Filtre</button>
+              <button class="a-filter-btn">Colonnes</button>
+            </div>
+            <table class="a-table">
+              <thead>
+                <tr><th>Designation</th><th>Type</th><th>Adresse</th><th>Lots</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr><td style="font-weight:500;color:#0f172a">Residence Les Lilas</td><td><span class="a-badge immeuble">Immeuble</span></td><td>12 rue des Lilas, 75020 Paris</td><td>24</td><td>BAT-2024-042</td></tr>
+                <tr><td style="font-weight:500;color:#0f172a">Villa Beausoleil</td><td><span class="a-badge maison">Maison</span></td><td>8 allee des Chenes, 92100 Boulogne</td><td>1</td><td>BAT-2024-043</td></tr>
+                <tr><td style="font-weight:500;color:#0f172a">Immeuble Voltaire</td><td><span class="a-badge immeuble">Immeuble</span></td><td>45 bd Voltaire, 75011 Paris</td><td>18</td><td>BAT-2024-044</td></tr>
+                <tr><td style="font-weight:500;color:#0f172a">Local Commercial Bastille</td><td><span class="a-badge commercial">Commercial</span></td><td>3 place de la Bastille, 75004 Paris</td><td>3</td><td>BAT-2024-045</td></tr>
+                <tr><td style="font-weight:500;color:#0f172a">Residence du Parc</td><td><span class="a-badge immeuble">Immeuble</span></td><td>22 avenue du Parc, 93300 Aubervilliers</td><td>36</td><td>BAT-2024-046</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- OPTION B — WARM ESTATE                           -->
+  <!-- ================================================ -->
+  <div id="option-b" class="option-section">
+    <div class="option-tag" style="background: #3d2e0a; color: #fbbf24;">Option B</div>
+    <div class="option-title">Warm Estate</div>
+    <div class="option-subtitle">
+      Tons chauds, fond sombre, accents ambre/or. Premium et chaleureux.
+      Ideal pour un produit a forte identite dans l'immobilier.
+    </div>
+
+    <div class="palette">
+      <div class="palette-item"><div class="palette-swatch" style="background:#f59e0b"></div><div class="palette-name">Primary</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#fafaf9"></div><div class="palette-name">Foreground</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#1c1917"></div><div class="palette-name">Background</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#292524"></div><div class="palette-name">Card</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#44403c"></div><div class="palette-name">Border</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#ef4444"></div><div class="palette-name">Destructive</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#4ade80"></div><div class="palette-name">Success</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#60a5fa"></div><div class="palette-name">Info</div></div>
+    </div>
+
+    <div class="typo-sample" style="background: #292524; border-color: #44403c;">
+      <h3 style="color: #fafaf9;">Clash Display — Titres et headings</h3>
+      <p style="color: #a8a29e;">Satoshi — Corps de texte, labels, descriptions. Sur fond sombre, le contraste reste excellent avec des tons stone naturels.</p>
+    </div>
+
+    <div class="screens-grid">
+      <!-- Login -->
+      <div class="screen-card">
+        <div class="screen-label">Page de connexion</div>
+        <div class="mockup-b-login">
+          <div class="b-login-card">
+            <div class="logo">Immo<span>Checker</span></div>
+            <div class="tagline">Gestion d'etats des lieux simplifiee</div>
+            <div class="b-field">
+              <label>Adresse email</label>
+              <input type="text" value="jean.dupont@agence.fr" />
+            </div>
+            <div class="b-field">
+              <label>Mot de passe</label>
+              <input type="password" value="********" />
+            </div>
+            <button class="b-btn-primary">Se connecter</button>
+            <div class="b-divider">ou</div>
+            <a class="b-link">Creer un compte</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail -->
+      <div class="screen-card">
+        <div class="screen-label">Fiche batiment</div>
+        <div class="mockup-b-detail">
+          <div class="b-detail-header">
+            <div>
+              <div class="b-detail-title">Residence Les Lilas</div>
+              <div class="b-detail-subtitle">12 rue des Lilas, 75020 Paris</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="b-btn-sm">Modifier</button>
+              <button class="b-btn-sm primary">+ Ajouter un lot</button>
+            </div>
+          </div>
+          <div class="b-detail-grid">
+            <div class="b-detail-section">
+              <h3>Informations</h3>
+              <div class="b-detail-row"><span class="label">Type</span><span class="value"><span class="b-badge immeuble">Immeuble</span></span></div>
+              <div class="b-detail-row"><span class="label">Reference</span><span class="value">BAT-2024-042</span></div>
+              <div class="b-detail-row"><span class="label">Annee construction</span><span class="value">1992</span></div>
+              <div class="b-detail-row"><span class="label">Nombre de lots</span><span class="value">24</span></div>
+            </div>
+            <div class="b-detail-section">
+              <h3>Adresses</h3>
+              <div class="b-detail-row"><span class="label">Principale</span><span class="value">12 rue des Lilas</span></div>
+              <div class="b-detail-row"><span class="label">Code postal</span><span class="value">75020</span></div>
+              <div class="b-detail-row"><span class="label">Ville</span><span class="value">Paris</span></div>
+              <div class="b-detail-row"><span class="label">Secondaire</span><span class="value">14 rue des Lilas</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout (full width) -->
+      <div class="screen-card full">
+        <div class="screen-label">Parc immobilier — Liste des batiments</div>
+        <div class="mockup-b-main">
+          <div class="b-sidebar">
+            <div class="b-sidebar-header">
+              <div class="ws-avatar">EP</div>
+              <div class="ws-name">EDL Express Paris</div>
+              <div class="ws-type">Societe d'EDL</div>
+            </div>
+            <div class="b-nav-group">
+              <div class="b-nav-group-title">Referentiel</div>
+              <div class="b-nav-item active"><div class="b-nav-icon"></div> Parc immobilier</div>
+              <div class="b-nav-item"><div class="b-nav-icon"></div> Tiers</div>
+              <div class="b-nav-item"><div class="b-nav-icon"></div> Templates</div>
+            </div>
+            <div class="b-nav-group">
+              <div class="b-nav-group-title">Operationnel</div>
+              <div class="b-nav-item"><div class="b-nav-icon"></div> Missions</div>
+              <div class="b-nav-item"><div class="b-nav-icon"></div> Tableau de bord</div>
+            </div>
+            <div class="b-nav-group">
+              <div class="b-nav-group-title">Administration</div>
+              <div class="b-nav-item"><div class="b-nav-icon"></div> Parametres</div>
+            </div>
+          </div>
+          <div class="b-content">
+            <div class="b-breadcrumb">Referentiel / <span>Parc immobilier</span></div>
+            <div class="b-page-header">
+              <div class="b-page-title">Parc immobilier</div>
+              <div style="display:flex;gap:8px;">
+                <button class="b-btn-sm">Importer CSV</button>
+                <button class="b-btn-sm primary">+ Nouveau batiment</button>
+              </div>
+            </div>
+            <div class="b-stats">
+              <div class="b-stat-card accent"><div class="b-stat-value">82</div><div class="b-stat-label">Batiments</div></div>
+              <div class="b-stat-card"><div class="b-stat-value">347</div><div class="b-stat-label">Lots actifs</div></div>
+              <div class="b-stat-card"><div class="b-stat-value">12</div><div class="b-stat-label">Archives</div></div>
+            </div>
+            <div class="b-toolbar">
+              <input class="b-search" placeholder="Rechercher un batiment, une adresse..." />
+              <button class="b-btn-sm">+ Filtre</button>
+              <button class="b-btn-sm">Colonnes</button>
+            </div>
+            <table class="b-table">
+              <thead>
+                <tr><th>Designation</th><th>Type</th><th>Adresse</th><th>Lots</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr><td style="font-weight:500;color:#fafaf9">Residence Les Lilas</td><td><span class="b-badge immeuble">Immeuble</span></td><td>12 rue des Lilas, 75020 Paris</td><td>24</td><td style="color:#78716c">BAT-2024-042</td></tr>
+                <tr><td style="font-weight:500;color:#fafaf9">Villa Beausoleil</td><td><span class="b-badge maison">Maison</span></td><td>8 allee des Chenes, 92100 Boulogne</td><td>1</td><td style="color:#78716c">BAT-2024-043</td></tr>
+                <tr><td style="font-weight:500;color:#fafaf9">Immeuble Voltaire</td><td><span class="b-badge immeuble">Immeuble</span></td><td>45 bd Voltaire, 75011 Paris</td><td>18</td><td style="color:#78716c">BAT-2024-044</td></tr>
+                <tr><td style="font-weight:500;color:#fafaf9">Local Commercial Bastille</td><td><span class="b-badge commercial">Commercial</span></td><td>3 place de la Bastille, 75004 Paris</td><td>3</td><td style="color:#78716c">BAT-2024-045</td></tr>
+                <tr><td style="font-weight:500;color:#fafaf9">Residence du Parc</td><td><span class="b-badge immeuble">Immeuble</span></td><td>22 avenue du Parc, 93300 Aubervilliers</td><td>36</td><td style="color:#78716c">BAT-2024-046</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- OPTION C — MODERN SLATE                          -->
+  <!-- ================================================ -->
+  <div id="option-c" class="option-section">
+    <div class="option-tag" style="background: #1a1a2e; color: #a78bfa;">Option C</div>
+    <div class="option-title">Modern Slate</div>
+    <div class="option-subtitle">
+      Design sombre profond, accents violet/indigo, effets glassmorphism.
+      SaaS moderne et premium. Ideal pour se demarquer des outils immobiliers classiques.
+    </div>
+
+    <div class="palette">
+      <div class="palette-item"><div class="palette-swatch" style="background:linear-gradient(135deg,#7c3aed,#3b82f6)"></div><div class="palette-name">Primary</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#f1f5f9"></div><div class="palette-name">Foreground</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#0f0f23"></div><div class="palette-name">Background</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:rgba(255,255,255,0.03);border-color:#333"></div><div class="palette-name">Card</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:rgba(255,255,255,0.08);border-color:#333"></div><div class="palette-name">Border</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#ef4444"></div><div class="palette-name">Destructive</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#4ade80"></div><div class="palette-name">Success</div></div>
+      <div class="palette-item"><div class="palette-swatch" style="background:#fbbf24"></div><div class="palette-name">Warning</div></div>
+    </div>
+
+    <div class="typo-sample" style="background: #1a1a2e; border-color: rgba(255,255,255,0.08);">
+      <h3 style="color: #f1f5f9;">Clash Display — Titres et headings</h3>
+      <p style="color: #94a3b8;">Satoshi — Corps de texte, labels, descriptions. Le glassmorphism et les degradations subtiles donnent de la profondeur a l'interface.</p>
+    </div>
+
+    <div class="screens-grid">
+      <!-- Login -->
+      <div class="screen-card">
+        <div class="screen-label">Page de connexion</div>
+        <div class="mockup-c-login">
+          <div class="c-login-card">
+            <div class="logo">Immo<span>Checker</span></div>
+            <div class="tagline">Gestion d'etats des lieux simplifiee</div>
+            <div class="c-field">
+              <label>Adresse email</label>
+              <input type="text" value="jean.dupont@agence.fr" />
+            </div>
+            <div class="c-field">
+              <label>Mot de passe</label>
+              <input type="password" value="********" />
+            </div>
+            <button class="c-btn-primary">Se connecter</button>
+            <a class="c-link">Creer un compte</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail -->
+      <div class="screen-card">
+        <div class="screen-label">Fiche batiment</div>
+        <div class="mockup-c-detail">
+          <div class="c-detail-header">
+            <div>
+              <div class="c-detail-title">Residence Les Lilas</div>
+              <div class="c-detail-subtitle">12 rue des Lilas, 75020 Paris</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="c-btn-sm">Modifier</button>
+              <button class="c-btn-sm primary">+ Ajouter un lot</button>
+            </div>
+          </div>
+          <div class="c-detail-grid">
+            <div class="c-detail-section">
+              <h3>Informations</h3>
+              <div class="c-detail-row"><span class="label">Type</span><span class="value"><span class="c-badge immeuble">Immeuble</span></span></div>
+              <div class="c-detail-row"><span class="label">Reference</span><span class="value">BAT-2024-042</span></div>
+              <div class="c-detail-row"><span class="label">Annee construction</span><span class="value">1992</span></div>
+              <div class="c-detail-row"><span class="label">Nombre de lots</span><span class="value">24</span></div>
+            </div>
+            <div class="c-detail-section">
+              <h3>Adresses</h3>
+              <div class="c-detail-row"><span class="label">Principale</span><span class="value">12 rue des Lilas</span></div>
+              <div class="c-detail-row"><span class="label">Code postal</span><span class="value">75020</span></div>
+              <div class="c-detail-row"><span class="label">Ville</span><span class="value">Paris</span></div>
+              <div class="c-detail-row"><span class="label">Secondaire</span><span class="value">14 rue des Lilas</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout (full width) -->
+      <div class="screen-card full">
+        <div class="screen-label">Parc immobilier — Liste des batiments</div>
+        <div class="mockup-c-main">
+          <div class="c-sidebar">
+            <div class="c-sidebar-header">
+              <div class="ws-avatar">EP</div>
+              <div class="ws-name">EDL Express Paris</div>
+              <div class="ws-type">Societe d'EDL</div>
+            </div>
+            <div class="c-nav-group">
+              <div class="c-nav-group-title">Referentiel</div>
+              <div class="c-nav-item active"><div class="c-nav-icon"></div> Parc immobilier</div>
+              <div class="c-nav-item"><div class="c-nav-icon"></div> Tiers</div>
+              <div class="c-nav-item"><div class="c-nav-icon"></div> Templates</div>
+            </div>
+            <div class="c-nav-group">
+              <div class="c-nav-group-title">Operationnel</div>
+              <div class="c-nav-item"><div class="c-nav-icon"></div> Missions</div>
+              <div class="c-nav-item"><div class="c-nav-icon"></div> Tableau de bord</div>
+            </div>
+            <div class="c-nav-group">
+              <div class="c-nav-group-title">Administration</div>
+              <div class="c-nav-item"><div class="c-nav-icon"></div> Parametres</div>
+            </div>
+          </div>
+          <div class="c-content">
+            <div class="c-breadcrumb">Referentiel / <span>Parc immobilier</span></div>
+            <div class="c-page-header">
+              <div class="c-page-title">Parc immobilier</div>
+              <div style="display:flex;gap:8px;">
+                <button class="c-btn-sm">Importer CSV</button>
+                <button class="c-btn-sm primary">+ Nouveau batiment</button>
+              </div>
+            </div>
+            <div class="c-stats">
+              <div class="c-stat-card accent"><div class="c-stat-value">82</div><div class="c-stat-label">Batiments</div></div>
+              <div class="c-stat-card"><div class="c-stat-value">347</div><div class="c-stat-label">Lots actifs</div></div>
+              <div class="c-stat-card"><div class="c-stat-value">12</div><div class="c-stat-label">Archives</div></div>
+            </div>
+            <div class="c-toolbar">
+              <input class="c-search" placeholder="Rechercher un batiment, une adresse..." />
+              <button class="c-btn-sm">+ Filtre</button>
+              <button class="c-btn-sm">Colonnes</button>
+            </div>
+            <table class="c-table">
+              <thead>
+                <tr><th>Designation</th><th>Type</th><th>Adresse</th><th>Lots</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr><td style="font-weight:500;color:#f1f5f9">Residence Les Lilas</td><td><span class="c-badge immeuble">Immeuble</span></td><td>12 rue des Lilas, 75020 Paris</td><td>24</td><td style="color:#64748b">BAT-2024-042</td></tr>
+                <tr><td style="font-weight:500;color:#f1f5f9">Villa Beausoleil</td><td><span class="c-badge maison">Maison</span></td><td>8 allee des Chenes, 92100 Boulogne</td><td>1</td><td style="color:#64748b">BAT-2024-043</td></tr>
+                <tr><td style="font-weight:500;color:#f1f5f9">Immeuble Voltaire</td><td><span class="c-badge immeuble">Immeuble</span></td><td>45 bd Voltaire, 75011 Paris</td><td>18</td><td style="color:#64748b">BAT-2024-044</td></tr>
+                <tr><td style="font-weight:500;color:#f1f5f9">Local Commercial Bastille</td><td><span class="c-badge commercial">Commercial</span></td><td>3 place de la Bastille, 75004 Paris</td><td>3</td><td style="color:#64748b">BAT-2024-045</td></tr>
+                <tr><td style="font-weight:500;color:#f1f5f9">Residence du Parc</td><td><span class="c-badge immeuble">Immeuble</span></td><td>22 avenue du Parc, 93300 Aubervilliers</td><td>36</td><td style="color:#64748b">BAT-2024-046</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="text-align:center;padding:80px 40px;color:#444;font-size:14px;">
+    ImmoChecker V2 — Design Proposals — April 2026
+  </div>
+
+</body>
+</html>

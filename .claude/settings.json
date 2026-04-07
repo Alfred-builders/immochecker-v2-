@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "mcp__railway__*",
+      "mcp__gemini-design-mcp__*",
+      "Bash(git *)",
+      "Bash(gh *)",
+      "mcp__notion__*"
+    ]
+  },
+  "_alfredhub_stack_permissions": {
+    "allow": [
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "mcp__railway__*",
+      "mcp__gemini-design-mcp__*",
+      "Bash(git *)",
+      "Bash(gh *)",
+      "mcp__notion__*"
+    ],
+    "deny": []
+  }
+}

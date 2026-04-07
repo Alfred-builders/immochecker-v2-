@@ -1,0 +1,290 @@
+{
+  "notionDir": "knowledge/notion/",
+  "index": "knowledge/notion/_index.md",
+  "databases": [
+    {
+      "name": "🗃️ Attributs par Table — ImmoChecker V1",
+      "notionId": "e3a1c51c-b6f9-4761-adec-e3b9d916f3e0",
+      "schema": "knowledge/notion/databases/attributs-par-table-immochecker-v1.md",
+      "pages": "knowledge/notion/databases/attributs-par-table-immochecker-v1/",
+      "pageCount": 313
+    },
+    {
+      "name": "🏠 Pièces",
+      "notionId": "dac98de7-8a52-47f5-8af6-58d2d2479570",
+      "schema": "knowledge/notion/databases/pieces.md",
+      "pages": "knowledge/notion/databases/pieces/",
+      "pageCount": 30
+    },
+    {
+      "name": "📦 Items EDL & Inventaire",
+      "notionId": "5a6d90f0-b7ea-4106-95e6-f5094176bdc0",
+      "schema": "knowledge/notion/databases/items-edl-inventaire.md",
+      "pages": "knowledge/notion/databases/items-edl-inventaire/",
+      "pageCount": 211
+    }
+  ],
+  "standalonePages": [
+    {
+      "title": "FCR - CheckImmo",
+      "notionId": "3071d95b-2f8a-80ac-9db8-dc4e9d2196c9",
+      "file": "knowledge/notion/pages/fcr-checkimmo.md"
+    },
+    {
+      "title": "🎯 Vision Fonctionnelle Cible — ImmoChecker V1",
+      "notionId": "3131d95b-2f8a-8146-af90-c1a3bb0ac08f",
+      "file": "knowledge/notion/pages/vision-fonctionnelle-cible-immochecker-v1.md"
+    },
+    {
+      "title": "FCR - US822 Gestion des clés par EDL (CleMission)",
+      "notionId": "3271d95b-2f8a-810c-b29c-f28899dba1de",
+      "file": "knowledge/notion/pages/fcr-us822-gestion-des-cles-par-edl-clemission.md"
+    },
+    {
+      "title": "🏗️ Architecture de Données — ImmoChecker V1",
+      "notionId": "3131d95b-2f8a-81c0-9630-df33a2b7889c",
+      "file": "knowledge/notion/pages/architecture-de-donnees-immochecker-v1.md"
+    },
+    {
+      "title": "📝 Attributs par Table — ImmoChecker V1",
+      "notionId": "3131d95b-2f8a-8164-9209-fa1f42bf2275",
+      "file": "knowledge/notion/pages/attributs-par-table-immochecker-v1.md"
+    },
+    {
+      "title": "📋 Spécification — Items, Critères d'évaluation & Templates EDL/Inventaire",
+      "notionId": "3251d95b-2f8a-81d9-b0be-fe4d40f7fb68",
+      "file": "knowledge/notion/pages/specification-items-criteres-d-evaluation-templates-edl-inventaire.md"
+    },
+    {
+      "title": "🎛️ Arbitrage — Modèle de saisie des items EDL",
+      "notionId": "3141d95b-2f8a-8117-9e82-ddd60a07dc27",
+      "file": "knowledge/notion/pages/arbitrage-modele-de-saisie-des-items-edl.md"
+    },
+    {
+      "title": "FCR - US833 Configurer les items par type de pièce",
+      "notionId": "3271d95b-2f8a-8151-87df-f7eac418165f",
+      "file": "knowledge/notion/pages/fcr-us833-configurer-les-items-par-type-de-piece.md"
+    },
+    {
+      "title": "🔔 Notifications — Spécification",
+      "notionId": "3271d95b-2f8a-8141-8819-de8b78d33994",
+      "file": "knowledge/notion/pages/notifications-specification.md"
+    },
+    {
+      "title": " CLAUDE.md — Contexte Permanent pour Claude Code",
+      "notionId": "32f1d95b-2f8a-8160-bb56-f3726e7caa5f",
+      "file": "knowledge/notion/pages/claude-md-contexte-permanent-pour-claude-code.md"
+    },
+    {
+      "title": "💰 Business Model — Discussion & Réflexions",
+      "notionId": "3271d95b-2f8a-814b-9f32-f7165eda3a1b",
+      "file": "knowledge/notion/pages/business-model-discussion-reflexions.md"
+    },
+    {
+      "title": "Synthèse retours prototype Back-office — Mars 2026",
+      "notionId": "3261d95b-2f8a-810c-91e2-e413f0c8b6c4",
+      "file": "knowledge/notion/pages/synthese-retours-prototype-back-office-mars-2026.md"
+    },
+    {
+      "title": "Hub de Ressources — ImmoChecker",
+      "notionId": "3271d95b-2f8a-81e8-a80d-d5e865d69854",
+      "file": "knowledge/notion/pages/hub-de-ressources-immochecker.md"
+    },
+    {
+      "title": "Document de cadrage amont",
+      "notionId": "3101d95b-2f8a-809d-b5e3-f43f86d81075",
+      "file": "knowledge/notion/pages/document-de-cadrage-amont.md"
+    },
+    {
+      "title": "Cadrage Fonctionnel — Check My Flat",
+      "notionId": "2b61d95b-2f8a-80b0-a0ca-ddd02e9b47a4",
+      "file": "knowledge/notion/pages/cadrage-fonctionnel-check-my-flat.md"
+    },
+    {
+      "title": "Kick off & Atelier n°1 ",
+      "notionId": "3101d95b-2f8a-806f-9397-f09b4d801898",
+      "file": "knowledge/notion/pages/kick-off-atelier-n-1.md"
+    },
+    {
+      "title": "EPIC 11 — Multi-workspace, Auth, Comptes & Paramètres",
+      "notionId": "3131d95b-2f8a-812c-ab8b-ed6b2d98c4fa",
+      "file": "knowledge/notion/pages/related/epic-11-multi-workspace-auth-comptes-parametres.md"
+    },
+    {
+      "title": "EPIC 1 — Gestion des Bâtiments & Lots",
+      "notionId": "3131d95b-2f8a-81f3-a317-c6756c9ae867",
+      "file": "knowledge/notion/pages/related/epic-1-gestion-des-batiments-lots.md"
+    },
+    {
+      "title": "EPIC 2 — Gestion des Tiers",
+      "notionId": "3131d95b-2f8a-8164-8e3e-e9fee9e70624",
+      "file": "knowledge/notion/pages/related/epic-2-gestion-des-tiers.md"
+    },
+    {
+      "title": "EPIC 13 — Missions & Planification",
+      "notionId": "3131d95b-2f8a-8131-b48b-e85641cc8c31",
+      "file": "knowledge/notion/pages/related/epic-13-missions-planification.md"
+    },
+    {
+      "title": "EPIC 10 — API de Gestion des EDL (Back-office)",
+      "notionId": "3131d95b-2f8a-8132-940f-ee9684b08080",
+      "file": "knowledge/notion/pages/related/epic-10-api-de-gestion-des-edl-back-office.md"
+    },
+    {
+      "title": "EPIC 4 — Gestion des Templates (EDL & Inventaires)",
+      "notionId": "3131d95b-2f8a-81c3-b92a-c62e50395681",
+      "file": "knowledge/notion/pages/related/epic-4-gestion-des-templates-edl-inventaires.md"
+    },
+    {
+      "title": "EPIC 5 — Saisie EDL / Inventaires sur Tablette",
+      "notionId": "3131d95b-2f8a-81ad-a326-dea9c36ca6d6",
+      "file": "knowledge/notion/pages/related/epic-5-saisie-edl-inventaires-sur-tablette.md"
+    },
+    {
+      "title": "EPIC 8 — Signature & Verrouillage Légal",
+      "notionId": "3131d95b-2f8a-81ed-aa72-e2a4b2ff1dac",
+      "file": "knowledge/notion/pages/related/epic-8-signature-verrouillage-legal.md"
+    },
+    {
+      "title": "EPIC 9 — Génération & Diffusion des Rapports",
+      "notionId": "3131d95b-2f8a-81a1-bb6a-d5c2b927d5e5",
+      "file": "knowledge/notion/pages/related/epic-9-generation-diffusion-des-rapports.md"
+    },
+    {
+      "title": "EPIC 12 — Saisie Vocale & IA",
+      "notionId": "3131d95b-2f8a-814b-95e7-e42537c63de7",
+      "file": "knowledge/notion/pages/related/epic-12-saisie-vocale-ia.md"
+    },
+    {
+      "title": "EPIC 14 — Dashboard Admin (Back-office)",
+      "notionId": "3271d95b-2f8a-816e-9e35-ec34bc151a59",
+      "file": "knowledge/notion/pages/related/epic-14-dashboard-admin-back-office.md"
+    },
+    {
+      "title": "EPIC 15 — Contrôle Qualité",
+      "notionId": "3271d95b-2f8a-8111-b535-c38898546a10",
+      "file": "knowledge/notion/pages/related/epic-15-controle-qualite.md"
+    },
+    {
+      "title": "EPIC 16 — Composants Transverses",
+      "notionId": "3271d95b-2f8a-8198-928c-f11fa16a89de",
+      "file": "knowledge/notion/pages/related/epic-16-composants-transverses.md"
+    },
+    {
+      "title": "FCR - US602 Recevoir des webhooks lors d'événements EDL",
+      "notionId": "3131d95b-2f8a-81d2-aff2-ccc937f3a05a",
+      "file": "knowledge/notion/pages/related/fcr-us602-recevoir-des-webhooks-lors-d-evenements-edl.md"
+    },
+    {
+      "title": "FCR - US600 Créer un EDL / Mission via API REST",
+      "notionId": "3131d95b-2f8a-8148-9e27-f328c415050a",
+      "file": "knowledge/notion/pages/related/fcr-us600-creer-un-edl-mission-via-api-rest.md"
+    },
+    {
+      "title": "FCR - US603 Documentation API interactive (OpenAPI / Swagger)",
+      "notionId": "3131d95b-2f8a-811d-af7b-c9b6f943d91a",
+      "file": "knowledge/notion/pages/related/fcr-us603-documentation-api-interactive-openapi-swagger.md"
+    },
+    {
+      "title": "FCR - US599 Générer et gérer des clés API par workspace",
+      "notionId": "3131d95b-2f8a-81b8-9178-f139d29338fc",
+      "file": "knowledge/notion/pages/related/fcr-us599-generer-et-gerer-des-cles-api-par-workspace.md"
+    },
+    {
+      "title": "FCR - US601 Récupérer les URLs PDF et web d'un EDL signé via API",
+      "notionId": "3131d95b-2f8a-813d-92a5-db44a85ed889",
+      "file": "knowledge/notion/pages/related/fcr-us601-recuperer-les-urls-pdf-et-web-d-un-edl-signe-via-api.md"
+    },
+    {
+      "title": "FCR - US577 Créer un workspace avec type de profil",
+      "notionId": "3131d95b-2f8a-81a7-b0f3-e3558e44a603",
+      "file": "knowledge/notion/pages/related/fcr-us577-creer-un-workspace-avec-type-de-profil.md"
+    },
+    {
+      "title": "FCR - US578 Créer un compte et s'authentifier par JWT",
+      "notionId": "3131d95b-2f8a-81c4-8534-dd208f9a2c2d",
+      "file": "knowledge/notion/pages/related/fcr-us578-creer-un-compte-et-s-authentifier-par-jwt.md"
+    },
+    {
+      "title": "FCR - US579 Définir et gérer les rôles via WorkspaceUser",
+      "notionId": "3131d95b-2f8a-81d2-ba8a-d1710b4b4a0f",
+      "file": "knowledge/notion/pages/related/fcr-us579-definir-et-gerer-les-roles-via-workspaceuser.md"
+    },
+    {
+      "title": "FCR - US580 Inviter un utilisateur dans un workspace",
+      "notionId": "3131d95b-2f8a-8137-bb3f-d33d86fd27a6",
+      "file": "knowledge/notion/pages/related/fcr-us580-inviter-un-utilisateur-dans-un-workspace.md"
+    },
+    {
+      "title": "FCR - US581 Garantir l'isolation complète des données entre workspaces",
+      "notionId": "3131d95b-2f8a-817f-93a1-c77d53bf7e21",
+      "file": "knowledge/notion/pages/related/fcr-us581-garantir-l-isolation-complete-des-donnees-entre-workspaces.md"
+    },
+    {
+      "title": "FCR - US582 Archivage froid des données (rétention 10+ ans)",
+      "notionId": "3131d95b-2f8a-81d8-8baa-e3ac1558e639",
+      "file": "knowledge/notion/pages/related/fcr-us582-archivage-froid-des-donnees-retention-10-ans.md"
+    },
+    {
+      "title": "FCR - US583 Créer un bâtiment avec ses informations de base",
+      "notionId": "3131d95b-2f8a-819c-9980-d19f54040bb7",
+      "file": "knowledge/notion/pages/related/fcr-us583-creer-un-batiment-avec-ses-informations-de-base.md"
+    },
+    {
+      "title": "FCR - US584 Créer un lot rattaché à un bâtiment",
+      "notionId": "3131d95b-2f8a-81e2-ab85-eff84eb43c2c",
+      "file": "knowledge/notion/pages/related/fcr-us584-creer-un-lot-rattache-a-un-batiment.md"
+    },
+    {
+      "title": "FCR - US585 Créer une maison = 1 bâtiment + 1 lot en un clic",
+      "notionId": "3131d95b-2f8a-818e-84da-f1f56abcdbd4",
+      "file": "knowledge/notion/pages/related/fcr-us585-creer-une-maison-1-batiment-1-lot-en-un-clic.md"
+    },
+    {
+      "title": "FCR - US586 Lister, filtrer et rechercher dans le parc immobilier",
+      "notionId": "3131d95b-2f8a-81a8-b178-f5b5f59a570b",
+      "file": "knowledge/notion/pages/related/fcr-us586-lister-filtrer-et-rechercher-dans-le-parc-immobilier.md"
+    },
+    {
+      "title": "FCR - US588 Créer un tiers (personne physique ou morale)",
+      "notionId": "3131d95b-2f8a-81f6-9dbb-c73f64547ebd",
+      "file": "knowledge/notion/pages/related/fcr-us588-creer-un-tiers-personne-physique-ou-morale.md"
+    },
+    {
+      "title": "FCR - US589 Associer une personne physique à une personne morale via TiersOrganisation",
+      "notionId": "3131d95b-2f8a-81a5-adb1-c98b216d60b6",
+      "file": "knowledge/notion/pages/related/fcr-us589-associer-une-personne-physique-a-une-personne-morale-via-tiersorganisa.md"
+    },
+    {
+      "title": "FCR - US590 Lier un ou plusieurs propriétaires à un lot (indivision)",
+      "notionId": "3131d95b-2f8a-8147-a839-e2f001f8920a",
+      "file": "knowledge/notion/pages/related/fcr-us590-lier-un-ou-plusieurs-proprietaires-a-un-lot-indivision.md"
+    },
+    {
+      "title": "FCR - US592 Retrouver un tiers par nom, type ou rôle",
+      "notionId": "3131d95b-2f8a-81da-aa5d-cb97824de207",
+      "file": "knowledge/notion/pages/related/fcr-us592-retrouver-un-tiers-par-nom-type-ou-role.md"
+    },
+    {
+      "title": "FCR - US591 Lier un mandataire de gestion à un lot",
+      "notionId": "3131d95b-2f8a-81c1-8265-e4dcc4094beb",
+      "file": "knowledge/notion/pages/related/fcr-us591-lier-un-mandataire-de-gestion-a-un-lot.md"
+    },
+    {
+      "title": "FCR - US593 Mettre à jour ou archiver un tiers",
+      "notionId": "3131d95b-2f8a-818c-ba3f-c94c9767c22d",
+      "file": "knowledge/notion/pages/related/fcr-us593-mettre-a-jour-ou-archiver-un-tiers.md"
+    },
+    {
+      "title": "Lot 1 — Socle, Administration & Configuration",
+      "notionId": "3131d95b-2f8a-81de-af8e-d782a1b05a0e",
+      "file": "knowledge/notion/pages/related/lot-1-socle-administration-configuration.md"
+    },
+    {
+      "title": "Lot 2 — Saisie Terrain & Production",
+      "notionId": "3131d95b-2f8a-8158-a7f1-e187fd1ba493",
+      "file": "knowledge/notion/pages/related/lot-2-saisie-terrain-production.md"
+    }
+  ],
+  "lastSync": "2026-04-07T09:53:32.197Z"
+}
