@@ -154,7 +154,7 @@ export function DataTable<T>({
 
   // --- Client-side filter + sort ---
   const processedData = useMemo(() => {
-    let result = [...data];
+    let result = Array.isArray(data) ? [...data] : [];
 
     // Apply client-side filters
     if (filters.length > 0) {

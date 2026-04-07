@@ -32,7 +32,10 @@ export function useBatiments(params?: BatimentsParams) {
 
   return useQuery({
     queryKey: [...keys.batiments, params],
-    queryFn: () => apiGet<Batiment[]>(`/batiments${query ? `?${query}` : ''}`),
+    queryFn: async () => {
+      const res = await apiGet<{ batiments: Batiment[] }>(`/batiments${query ? `?${query}` : ''}`);
+      return res.batiments;
+    },
   });
 }
 
@@ -111,7 +114,10 @@ export function useLots(params?: LotsParams) {
 
   return useQuery({
     queryKey: [...keys.lots, params],
-    queryFn: () => apiGet<Lot[]>(`/lots${query ? `?${query}` : ''}`),
+    queryFn: async () => {
+      const res = await apiGet<{ lots: Lot[] }>(`/lots${query ? `?${query}` : ''}`);
+      return res.lots;
+    },
   });
 }
 
