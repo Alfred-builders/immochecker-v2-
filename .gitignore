@@ -8,3 +8,6 @@ server/node_modules
 .playwright-mcp/
 *.png
 .mcp.json
+
+# AI chat uploads
+.uploads/

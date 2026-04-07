@@ -71,13 +71,13 @@ export function MainLayout() {
   const location = useLocation();
 
   const userInitials = user
-    ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase()
+    ? `${user.prenom?.[0] ?? ''}${user.nom?.[0] ?? ''}`.toUpperCase()
     : '??';
 
   const workspaceInitials = workspace
-    ? workspace.name
+    ? workspace.nom
         .split(' ')
-        .map((w) => w[0])
+        .map((w: string) => w[0])
         .join('')
         .toUpperCase()
         .slice(0, 2)
@@ -109,11 +109,11 @@ export function MainLayout() {
                 className="min-w-0 flex-1"
               >
                 <p className="truncate text-sm font-semibold text-foreground">
-                  {workspace?.name ?? 'Workspace'}
+                  {workspace?.nom ?? 'Workspace'}
                 </p>
                 <p className="truncate text-xs text-muted-foreground">
-                  {workspace?.type
-                    ? WORKSPACE_TYPE_LABELS[workspace.type] ?? workspace.type
+                  {workspace?.type_workspace
+                    ? WORKSPACE_TYPE_LABELS[workspace.type_workspace] ?? workspace.type_workspace
                     : ''}
                 </p>
               </motion.div>
@@ -243,7 +243,7 @@ export function MainLayout() {
                     <>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-foreground">
-                          {user?.firstName} {user?.lastName}
+                          {user?.prenom} {user?.nom}
                         </p>
                         <p className="truncate text-xs text-muted-foreground">
                           {user?.email}

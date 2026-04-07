@@ -134,8 +134,8 @@ const rowVariants = {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function getInitials(firstName: string, lastName: string): string {
-  return `${(firstName?.[0] ?? '').toUpperCase()}${(lastName?.[0] ?? '').toUpperCase()}`;
+function getInitials(prenom: string, nom: string): string {
+  return `${(prenom?.[0] ?? '').toUpperCase()}${(nom?.[0] ?? '').toUpperCase()}`;
 }
 
 function formatDate(dateStr: string): string {
@@ -182,7 +182,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
   useEffect(() => {
     if (workspace) {
       form.reset({
-        name: workspace.name ?? '',
+        name: workspace.nom ?? '',
         type_workspace: workspace.type_workspace ?? '',
         siret: workspace.siret ?? '',
         email: workspace.email ?? '',
@@ -719,12 +719,12 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
                           <AvatarFallback className="bg-[#2563EB]/10 text-xs font-medium text-[#2563EB]">
-                            {getInitials(member.first_name, member.last_name)}
+                            {getInitials(member.prenom, member.nom)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="text-sm font-medium text-foreground">
-                            {member.first_name} {member.last_name}
+                            {member.prenom} {member.nom}
                             {isSelf && (
                               <span className="ml-1.5 text-xs text-muted-foreground">
                                 (vous)
@@ -779,7 +779,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
                           onClick={() =>
                             handleRemoveMember(
                               member.id,
-                              `${member.first_name} ${member.last_name}`,
+                              `${member.prenom} ${member.nom}`,
                             )
                           }
                           disabled={removeMember.isPending}

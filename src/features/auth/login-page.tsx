@@ -38,8 +38,8 @@ type LoginForm = z.infer<typeof loginSchema>;
 
 interface WorkspaceOption {
   id: string;
-  name: string;
-  type: string;
+  nom: string;
+  type_workspace: string;
   role: string;
 }
 
@@ -123,7 +123,7 @@ export function LoginPage() {
                 <SelectContent>
                   {workspaces.map((ws) => (
                     <SelectItem key={ws.id} value={ws.id}>
-                      {ws.name}
+                      {ws.nom}
                     </SelectItem>
                   ))}
                 </SelectContent>

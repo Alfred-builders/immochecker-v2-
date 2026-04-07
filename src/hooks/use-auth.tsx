@@ -11,15 +11,19 @@ import { apiPost, apiGet, ApiError } from '@/lib/api';
 interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
+  nom: string;
+  prenom: string;
+  statut: string;
+  avatar_color?: string;
+  role?: string;
 }
 
 interface Workspace {
   id: string;
-  name: string;
-  type: string;
+  nom: string;
+  type_workspace: string;
+  couleur_primaire?: string;
+  logo_url?: string;
   role: string;
 }
 
@@ -47,8 +51,8 @@ interface AuthContextType extends AuthState {
 }
 
 interface RegisterData {
-  firstName: string;
-  lastName: string;
+  nom: string;
+  prenom: string;
   email: string;
   password: string;
   workspaceName: string;

@@ -20,8 +20,8 @@ import {
 import { apiGet, apiPost, ApiError } from '@/lib/api';
 
 const inviteSchema = z.object({
-  firstName: z.string().min(1, 'Le prenom est requis'),
-  lastName: z.string().min(1, 'Le nom est requis'),
+  prenom: z.string().min(1, 'Le prenom est requis'),
+  nom: z.string().min(1, 'Le nom est requis'),
   password: z
     .string()
     .min(8, 'Le mot de passe doit contenir au moins 8 caracteres'),
@@ -48,7 +48,7 @@ export function InviteAcceptPage() {
 
   const form = useForm<InviteForm>({
     resolver: zodResolver(inviteSchema),
-    defaultValues: { firstName: '', lastName: '', password: '' },
+    defaultValues: { prenom: '', nom: '', password: '' },
   });
 
   useEffect(() => {
@@ -187,32 +187,32 @@ export function InviteAcceptPage() {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="inv-lastName">Nom</Label>
+                        <Label htmlFor="inv-nom">Nom</Label>
                         <Input
-                          id="inv-lastName"
+                          id="inv-nom"
                           placeholder="Dupont"
                           autoComplete="family-name"
                           className="bg-[#f8fafc] border-[#e2e8f0]"
-                          {...form.register('lastName')}
+                          {...form.register('nom')}
                         />
-                        {form.formState.errors.lastName && (
+                        {form.formState.errors.nom && (
                           <p className="text-xs text-destructive">
-                            {form.formState.errors.lastName.message}
+                            {form.formState.errors.nom.message}
                           </p>
                         )}
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="inv-firstName">Prenom</Label>
+                        <Label htmlFor="inv-prenom">Prenom</Label>
                         <Input
-                          id="inv-firstName"
+                          id="inv-prenom"
                           placeholder="Jean"
                           autoComplete="given-name"
                           className="bg-[#f8fafc] border-[#e2e8f0]"
-                          {...form.register('firstName')}
+                          {...form.register('prenom')}
                         />
-                        {form.formState.errors.firstName && (
+                        {form.formState.errors.prenom && (
                           <p className="text-xs text-destructive">
-                            {form.formState.errors.firstName.message}
+                            {form.formState.errors.prenom.message}
                           </p>
                         )}
                       </div>

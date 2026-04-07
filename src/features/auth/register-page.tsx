@@ -27,8 +27,8 @@ import { useAuth } from '@/hooks/use-auth';
 import { ApiError } from '@/lib/api';
 
 const registerSchema = z.object({
-  lastName: z.string().min(1, 'Le nom est requis'),
-  firstName: z.string().min(1, 'Le prenom est requis'),
+  nom: z.string().min(1, 'Le nom est requis'),
+  prenom: z.string().min(1, 'Le prenom est requis'),
   email: z.string().email('Adresse email invalide'),
   password: z
     .string()
@@ -57,8 +57,8 @@ export function RegisterPage() {
   const form = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      lastName: '',
-      firstName: '',
+      nom: '',
+      prenom: '',
       email: '',
       password: '',
       workspaceName: '',
@@ -108,32 +108,32 @@ export function RegisterPage() {
             {/* Name row */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="lastName">Nom</Label>
+                <Label htmlFor="nom">Nom</Label>
                 <Input
-                  id="lastName"
+                  id="nom"
                   placeholder="Dupont"
                   autoComplete="family-name"
                   className="bg-[#f8fafc] border-[#e2e8f0]"
-                  {...form.register('lastName')}
+                  {...form.register('nom')}
                 />
-                {form.formState.errors.lastName && (
+                {form.formState.errors.nom && (
                   <p className="text-xs text-destructive">
-                    {form.formState.errors.lastName.message}
+                    {form.formState.errors.nom.message}
                   </p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="firstName">Prenom</Label>
+                <Label htmlFor="prenom">Prenom</Label>
                 <Input
-                  id="firstName"
+                  id="prenom"
                   placeholder="Jean"
                   autoComplete="given-name"
                   className="bg-[#f8fafc] border-[#e2e8f0]"
-                  {...form.register('firstName')}
+                  {...form.register('prenom')}
                 />
-                {form.formState.errors.firstName && (
+                {form.formState.errors.prenom && (
                   <p className="text-xs text-destructive">
-                    {form.formState.errors.firstName.message}
+                    {form.formState.errors.prenom.message}
                   </p>
                 )}
               </div>

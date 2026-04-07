@@ -7,7 +7,7 @@ import { apiGet, apiPost, apiPut, apiDelete } from '@/lib/api';
 
 export interface WorkspaceDetail {
   id: string;
-  name: string;
+  nom: string;
   type_workspace: string;
   siret: string | null;
   email: string | null;
@@ -22,8 +22,8 @@ export interface WorkspaceDetail {
 export interface Member {
   id: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  nom: string;
+  prenom: string;
   role: string;
   joined_at: string;
 }
