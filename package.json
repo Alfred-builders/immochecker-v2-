@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "dev:server": "node --watch server/index.js",
-    "build": "tsc -b && vite build && cd server && npm install --production",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
     "migrate": "node server/db/migrate.js",
     "start": "node server/index.js"
@@ -42,7 +42,16 @@
     "@radix-ui/react-collapsible": "^1.1.2",
     "@radix-ui/react-toggle": "^1.1.1",
     "cmdk": "^1.0.4",
-    "input-otp": "^1.4.1"
+    "input-otp": "^1.4.1",
+    "express": "^4.21.0",
+    "cors": "^2.8.5",
+    "pg": "^8.13.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.4.5",
+    "multer": "^1.4.5-lts.1",
+    "csv-parse": "^5.6.0",
+    "uuid": "^11.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
