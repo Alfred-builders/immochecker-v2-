@@ -12,6 +12,7 @@ export interface MissionFilters {
   statut?: string;
   technicien_id?: string;
   lot_id?: string;
+  batiment_id?: string;
   date_from?: string;
   date_to?: string;
   archived?: boolean;
@@ -25,6 +26,7 @@ export function useMissions(filters: MissionFilters = {}) {
   if (filters.statut) params.set('statut', filters.statut);
   if (filters.technicien_id) params.set('technicien_id', filters.technicien_id);
   if (filters.lot_id) params.set('lot_id', filters.lot_id);
+  if (filters.batiment_id) params.set('batiment_id', filters.batiment_id);
   if (filters.date_from) params.set('date_from', filters.date_from);
   if (filters.date_to) params.set('date_to', filters.date_to);
   if (filters.archived) params.set('archived', 'true');

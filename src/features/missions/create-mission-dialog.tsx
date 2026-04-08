@@ -8,19 +8,21 @@ import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '@/components/ui/dialog';
 import {
-  Form, FormField, FormItem, FormLabel, FormControl, FormMessage,
+  Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription,
 } from '@/components/ui/form';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
 import { useCreateMission } from './api';
+import { useAuth } from '@/hooks/use-auth';
+import { useMembers } from '@/features/admin/api';
 import { apiGet } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 
@@ -28,6 +30,9 @@ import { useQuery } from '@tanstack/react-query';
 
 const schema = z.object({
   lot_id: z.string().min(1, 'Lot requis'),
+  sens: z.enum(['entree', 'sortie']).default('entree'),
+  avec_inventaire: z.boolean().default(false),
+  technicien_id: z.string().optional(),
   titre: z.string().optional(),
   statut_rdv: z.enum(['a_confirmer', 'confirme', 'reporte']).default('a_confirmer'),
   date_debut: z.string().optional(),
@@ -85,13 +90,18 @@ export function CreateMissionDialog({ open, onOpenChange }: Props) {
   const [selectedLot, setSelectedLot] = useState<LotOption | null>(null);
   const [lotOpen, setLotOpen] = useState(false);
 
+  const { workspace } = useAuth();
   const { data: lotOptions } = useLotSearch(lotSearch);
+  const { data: members } = useMembers(workspace?.id);
   const createMission = useCreateMission();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       lot_id: '',
+      sens: 'entree',
+      avec_inventaire: false,
+      technicien_id: '',
       titre: '',
       statut_rdv: 'a_confirmer',
       date_debut: '',
@@ -110,8 +120,10 @@ export function CreateMissionDialog({ open, onOpenChange }: Props) {
   }
 
   async function onSubmit(values: FormValues) {
+    const { technicien_id, ...rest } = values;
     const payload = {
-      ...values,
+      ...rest,
+      technicien_ids: technicien_id ? [technicien_id] : [],
       titre: values.titre || undefined,
       date_debut: values.date_debut || undefined,
       heure_debut: values.heure_debut || undefined,
@@ -197,6 +209,77 @@ export function CreateMissionDialog({ open, onOpenChange }: Props) {
                     )}
                   </div>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+            <FormField
+              control={form.control}
+              name="sens"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sens *</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="entree">Entrée</SelectItem>
+                      <SelectItem value="sortie">Sortie</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="avec_inventaire"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-between rounded-lg border px-3 py-2">
+                  <div>
+                    <FormLabel className="text-sm">Avec inventaire</FormLabel>
+                    <FormDescription className="text-xs">
+                      Créer également un inventaire du mobilier
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="technicien_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Technicien</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value ?? ''}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Sélectionner un technicien..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="">Non assigné</SelectItem>
+                      {(members ?? []).map((m) => (
+                        <SelectItem key={m.id} value={m.id}>
+                          {m.prenom} {m.nom}
+                          <span className="ml-2 text-xs text-muted-foreground capitalize">
+                            {m.role}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormItem>
               )}
             />

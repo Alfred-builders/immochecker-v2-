@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
     const wsId = req.user.workspaceId;
     const {
       search, statut, technicien_id,
-      date_from, date_to, lot_id,
+      date_from, date_to, lot_id, batiment_id,
       archived = 'false',
       cursor, limit: rawLimit,
     } = req.query;
@@ -85,6 +85,12 @@ router.get('/', async (req, res) => {
     if (lot_id) {
       conditions.push(`m.lot_id = $${idx}`);
       params.push(lot_id);
+      idx++;
+    }
+
+    if (batiment_id) {
+      conditions.push(`l.batiment_id = $${idx}`);
+      params.push(batiment_id);
       idx++;
     }
 
@@ -148,10 +154,18 @@ router.get('/stats', async (req, res) => {
   try {
     const wsId = req.user.workspaceId;
 
-    const [totals, byStatut, upcoming, overdue] = await Promise.all([
+    const [totals, byStatut, upcoming] = await Promise.all([
       queryOne(
         `SELECT
            COUNT(*) FILTER (WHERE est_archive = false) AS total,
+           COUNT(*) FILTER (WHERE est_archive = false AND date_debut = CURRENT_DATE AND statut NOT IN ('annulee')) AS missions_du_jour,
+           COUNT(*) FILTER (WHERE est_archive = false AND statut IN ('planifiee', 'assignee') AND date_debut > CURRENT_DATE) AS a_venir,
+           -- Actions en attente: sans technicien OU invitation refusée/en attente OU RDV à confirmer
+           COUNT(*) FILTER (WHERE est_archive = false AND statut NOT IN ('terminee','annulee') AND (
+             NOT EXISTS (SELECT 1 FROM imv2_mission_technicien mt WHERE mt.mission_id = imv2_mission.id)
+             OR EXISTS (SELECT 1 FROM imv2_mission_technicien mt2 WHERE mt2.mission_id = imv2_mission.id AND mt2.statut_invitation IN ('en_attente','refuse'))
+             OR statut_rdv = 'a_confirmer'
+           )) AS actions_en_attente,
            COUNT(*) FILTER (WHERE statut = 'planifiee' AND est_archive = false) AS planifiees,
            COUNT(*) FILTER (WHERE statut = 'assignee' AND est_archive = false) AS assignees,
            COUNT(*) FILTER (WHERE statut = 'terminee') AS terminees,
@@ -182,21 +196,12 @@ router.get('/stats', async (req, res) => {
          LIMIT 5`,
         [wsId],
       ),
-      queryOne(
-        `SELECT COUNT(*) AS count
-         FROM imv2_mission
-         WHERE workspace_id = $1 AND est_archive = false
-           AND statut IN ('planifiee', 'assignee')
-           AND date_debut < CURRENT_DATE`,
-        [wsId],
-      ),
     ]);
 
     res.json({
       ...totals,
       by_statut: byStatut,
       upcoming,
-      overdue: parseInt(overdue?.count ?? '0', 10),
     });
   } catch (err) {
     console.error('[missions] GET /stats', err);
@@ -258,6 +263,8 @@ router.post('/', async (req, res) => {
       lot_id, titre, statut = 'planifiee', statut_rdv = 'a_confirmer',
       date_debut, heure_debut, date_fin, heure_fin, commentaire,
       technicien_ids = [],
+      sens = 'entree', // entree | sortie
+      avec_inventaire = false,
     } = req.body;
 
     if (!lot_id) return res.status(400).json({ error: 'lot_id requis' });
@@ -294,6 +301,24 @@ router.post('/', async (req, res) => {
            VALUES ($1, $2) ON CONFLICT DO NOTHING`,
           [m.id, userId],
         );
+      }
+
+      // Auto-create EDL document(s)
+      if (sens && ['entree', 'sortie'].includes(sens)) {
+        await client.query(
+          `INSERT INTO imv2_edl_inventaire
+             (workspace_id, mission_id, lot_id, sens, type, statut)
+           VALUES ($1, $2, $3, $4, 'edl', 'brouillon')`,
+          [wsId, m.id, lot_id, sens],
+        );
+        if (avec_inventaire) {
+          await client.query(
+            `INSERT INTO imv2_edl_inventaire
+               (workspace_id, mission_id, lot_id, sens, type, statut)
+             VALUES ($1, $2, $3, $4, 'inventaire', 'brouillon')`,
+            [wsId, m.id, lot_id, sens],
+          );
+        }
       }
 
       // Update statut if techniciens assigned

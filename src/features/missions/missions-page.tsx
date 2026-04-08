@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Calendar, Plus, List, LayoutGrid, Map,
-  CheckCircle2, Clock, AlertTriangle, XCircle,
+  CheckCircle2, Clock, AlertTriangle, CalendarClock,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -220,22 +220,22 @@ export function MissionsPage() {
             color="bg-muted text-muted-foreground"
           />
           <StatCard
-            label="Planifiées"
-            value={Number(stats.planifiees ?? 0)}
-            icon={Clock}
-            color="bg-warning/10 text-warning"
-          />
-          <StatCard
-            label="Assignées"
-            value={Number(stats.assignees ?? 0)}
-            icon={CheckCircle2}
+            label="Missions du jour"
+            value={Number(stats.missions_du_jour ?? 0)}
+            icon={CalendarClock}
             color="bg-primary/10 text-primary"
           />
           <StatCard
-            label="En retard"
-            value={Number(stats.overdue ?? 0)}
+            label="Actions en attente"
+            value={Number(stats.actions_en_attente ?? 0)}
             icon={AlertTriangle}
-            color="bg-destructive/10 text-destructive"
+            color="bg-warning/10 text-warning"
+          />
+          <StatCard
+            label="À venir"
+            value={Number(stats.a_venir ?? 0)}
+            icon={Clock}
+            color="bg-success/10 text-success"
           />
         </div>
       )}

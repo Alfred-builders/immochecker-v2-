@@ -335,6 +335,10 @@ CREATE INDEX IF NOT EXISTS idx_imv2_mission_tech_user ON imv2_mission_technicien
 CREATE INDEX IF NOT EXISTS idx_imv2_edl_mission ON imv2_edl_inventaire(mission_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_edl_lot ON imv2_edl_inventaire(lot_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_cle_mission ON imv2_cle_mission(mission_id);
+
+-- Add type column to EDL to distinguish EDL vs Inventaire documents
+ALTER TABLE imv2_edl_inventaire ADD COLUMN IF NOT EXISTS type VARCHAR(15) NOT NULL DEFAULT 'edl'
+  CHECK (type IN ('edl', 'inventaire'));
 CREATE INDEX IF NOT EXISTS idx_imv2_indispo_user ON imv2_indisponibilite_technicien(user_id, workspace_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_indispo_dates ON imv2_indisponibilite_technicien(workspace_id, date_debut, date_fin);
 
