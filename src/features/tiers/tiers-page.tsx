@@ -45,10 +45,10 @@ const ROLE_LABELS: Record<string, string> = {
 type TabValue = 'tous' | 'proprietaire' | 'locataire' | 'mandataire';
 
 const TABS: { value: TabValue; label: string; icon: React.ElementType }[] = [
-  { value: 'tous', label: 'Tous', icon: Users },
   { value: 'proprietaire', label: 'Propriétaires', icon: User },
   { value: 'locataire', label: 'Locataires', icon: User },
   { value: 'mandataire', label: 'Mandataires', icon: Building },
+  { value: 'tous', label: 'Tous', icon: Users },
 ];
 
 // ---------------------------------------------------------------------------
@@ -176,7 +176,7 @@ const filterFields: FilterField[] = [
 export function TiersPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
-  const [activeTab, setActiveTab] = useState<TabValue>('tous');
+  const [activeTab, setActiveTab] = useState<TabValue>('proprietaire');
   const [createOpen, setCreateOpen] = useState(false);
 
   const { data: tiers, isLoading } = useTiersList({
