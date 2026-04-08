@@ -106,17 +106,14 @@ export function MainLayout() {
   return (
     <TooltipProvider delayDuration={200}>
       <div className="flex h-screen overflow-hidden bg-[#f1f5f9]">
-        {/* Sidebar spacer — always collapsed width */}
-        <div className="w-[72px] shrink-0" />
-
-        {/* Sidebar — overlays content on hover */}
+        {/* Sidebar — pushes content, auto-collapses unless pinned */}
         <motion.aside
           initial={false}
           animate={{ width: collapsed ? 72 : 260 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className="fixed left-0 top-0 z-30 flex h-screen flex-col border-r border-[#e2e8f0] bg-white shadow-lg"
+          className="relative flex shrink-0 flex-col border-r border-[#e2e8f0] bg-white"
         >
           {/* Workspace header */}
           <div className="flex h-16 items-center gap-3 border-b border-[#e2e8f0] px-4">
@@ -143,11 +140,34 @@ export function MainLayout() {
                 </p>
               </motion.div>
             )}
+            {!collapsed && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => setPinned(!pinned)}
+                    className={cn(
+                      'flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors',
+                      pinned
+                        ? 'bg-[#eff6ff] text-[#2563eb]'
+                        : 'text-muted-foreground hover:bg-[#f8fafc] hover:text-foreground',
+                    )}
+                  >
+                    {pinned ? (
+                      <Pin className="h-4 w-4" />
+                    ) : (
+                      <PinOff className="h-4 w-4" />
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>{pinned ? 'Detacher la barre' : 'Epingler le menu'}</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
           </div>
 
-
           {/* Search button */}
-          <div className="px-3 pb-2">
+          <div className="px-3 pb-2 pt-3">
             <button
               onClick={() => setSearchOpen(true)}
               className="flex w-full items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted"
@@ -250,25 +270,6 @@ export function MainLayout() {
               </div>
             ))}
           </nav>
-
-          {/* Pin toggle -- only visible when sidebar is expanded */}
-          {!collapsed && (
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              onClick={() => setPinned(!pinned)}
-              className="absolute -right-3 top-20 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card shadow-sm transition-colors hover:bg-muted/50"
-              title={pinned ? 'Detacher la barre' : 'Epingler la barre'}
-            >
-              {pinned ? (
-                <PinOff className="h-3 w-3 text-muted-foreground" />
-              ) : (
-                <Pin className="h-3 w-3 text-muted-foreground" />
-              )}
-            </motion.button>
-          )}
 
           {/* Footer: user info */}
           <div className="border-t border-[#e2e8f0] p-3">
