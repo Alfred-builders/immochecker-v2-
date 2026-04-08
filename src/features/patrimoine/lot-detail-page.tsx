@@ -1156,6 +1156,39 @@ export function LotDetailPage() {
                 )}
               </div>
 
+              {/* Dernier locataire (lecture seule) */}
+              <div>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                  Dernier locataire
+                </p>
+                {lot.dernier_locataire ? (
+                  <div className="flex items-center justify-between rounded-md border px-3 py-2 hover:bg-muted/40 transition-colors">
+                    <button
+                      type="button"
+                      className="flex items-center gap-2 text-sm text-left flex-1 min-w-0"
+                      onClick={() => navigate(`/app/tiers/${lot.dernier_locataire!.tiers_id}`)}
+                    >
+                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted">
+                        {lot.dernier_locataire.type === 'morale'
+                          ? <Building2 className="h-3 w-3 text-muted-foreground" />
+                          : <User className="h-3 w-3 text-muted-foreground" />}
+                      </div>
+                      <div className="min-w-0">
+                        <span className="font-medium truncate">{lot.dernier_locataire.nom_complet}</span>
+                        {lot.dernier_locataire.date_edl && (
+                          <p className="text-xs text-muted-foreground">
+                            EDL {lot.dernier_locataire.sens === 'entree' ? 'entrée' : 'sortie'} —{' '}
+                            {format(new Date(lot.dernier_locataire.date_edl), 'd MMM yyyy', { locale: fr })}
+                          </p>
+                        )}
+                      </div>
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground italic">Aucun locataire enregistré</p>
+                )}
+              </div>
+
             </div>
           </CollapsibleSection>
 

@@ -337,3 +337,88 @@ CREATE INDEX IF NOT EXISTS idx_imv2_edl_lot ON imv2_edl_inventaire(lot_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_cle_mission ON imv2_cle_mission(mission_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_indispo_user ON imv2_indisponibilite_technicien(user_id, workspace_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_indispo_dates ON imv2_indisponibilite_technicien(workspace_id, date_debut, date_fin);
+
+-- ============================================
+-- EPIC 4: Templates (TypePiece, CatalogueItem, etc.)
+-- ============================================
+
+-- Type de pièce (Cuisine, Chambre, SDB...)
+CREATE TABLE IF NOT EXISTS imv2_type_piece (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id UUID REFERENCES imv2_workspace(id) ON DELETE CASCADE, -- NULL = plateforme
+  nom VARCHAR(100) NOT NULL,
+  categorie_piece VARCHAR(50) CHECK (categorie_piece IN (
+    'vie', 'eau_sanitaires', 'circulations', 'exterieur_annexes', 'parties_communes'
+  )),
+  icon VARCHAR(50),
+  source VARCHAR(20) NOT NULL DEFAULT 'workspace' CHECK (source IN ('plateforme', 'workspace')),
+  est_archive BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Catalogue d'items (matériaux, équipements...)
+CREATE TABLE IF NOT EXISTS imv2_catalogue_item (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id UUID REFERENCES imv2_workspace(id) ON DELETE CASCADE, -- NULL = plateforme
+  nom VARCHAR(255) NOT NULL,
+  categorie VARCHAR(50) NOT NULL CHECK (categorie IN (
+    'revetements', 'plomberie', 'electricite', 'menuiseries', 'mobilier',
+    'electromenager', 'chauffage', 'ventilation', 'sanitaires', 'cuisine',
+    'securite', 'exterieur', 'communs', 'parking', 'cave', 'divers', 'autre'
+  )),
+  contexte VARCHAR(20) NOT NULL DEFAULT 'edl' CHECK (contexte IN ('edl', 'inventaire')),
+  parent_item_id UUID REFERENCES imv2_catalogue_item(id) ON DELETE SET NULL,
+  aide_contextuelle TEXT,
+  source VARCHAR(20) NOT NULL DEFAULT 'workspace' CHECK (source IN ('plateforme', 'workspace')),
+  est_archive BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Valeurs de référentiel (tags prédéfinis par item)
+CREATE TABLE IF NOT EXISTS imv2_valeur_referentiel (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  catalogue_item_id UUID NOT NULL REFERENCES imv2_catalogue_item(id) ON DELETE CASCADE,
+  workspace_id UUID REFERENCES imv2_workspace(id) ON DELETE CASCADE, -- NULL = plateforme
+  critere VARCHAR(30) NOT NULL CHECK (critere IN ('caracteristiques', 'degradations', 'couleur')),
+  valeur VARCHAR(255) NOT NULL,
+  source VARCHAR(20) NOT NULL DEFAULT 'workspace' CHECK (source IN ('plateforme', 'workspace')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Template Pièce ↔ Item (quels items sont pré-sélectionnés par type de pièce)
+CREATE TABLE IF NOT EXISTS imv2_template_piece_item (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  type_piece_id UUID NOT NULL REFERENCES imv2_type_piece(id) ON DELETE CASCADE,
+  catalogue_item_id UUID NOT NULL REFERENCES imv2_catalogue_item(id) ON DELETE CASCADE,
+  quantite_defaut INTEGER NOT NULL DEFAULT 1,
+  labels_defaut JSONB,
+  ordre_affichage INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(type_piece_id, catalogue_item_id)
+);
+
+-- Configuration critères par catégorie
+CREATE TABLE IF NOT EXISTS imv2_config_critere_categorie (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id UUID NOT NULL REFERENCES imv2_workspace(id) ON DELETE CASCADE,
+  categorie VARCHAR(50) NOT NULL,
+  etat_general VARCHAR(20) NOT NULL DEFAULT 'recommande' CHECK (etat_general IN ('masque', 'optionnel', 'recommande', 'obligatoire')),
+  proprete VARCHAR(20) NOT NULL DEFAULT 'optionnel',
+  photos VARCHAR(20) NOT NULL DEFAULT 'recommande',
+  caracteristiques VARCHAR(20) NOT NULL DEFAULT 'optionnel',
+  couleur VARCHAR(20) NOT NULL DEFAULT 'optionnel',
+  degradations VARCHAR(20) NOT NULL DEFAULT 'optionnel',
+  fonctionnement VARCHAR(20) NOT NULL DEFAULT 'masque',
+  quantite VARCHAR(20) NOT NULL DEFAULT 'masque',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(workspace_id, categorie)
+);
+
+-- Indexes for templates
+CREATE INDEX IF NOT EXISTS idx_imv2_type_piece_ws ON imv2_type_piece(workspace_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_catalogue_item_ws ON imv2_catalogue_item(workspace_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_catalogue_item_cat ON imv2_catalogue_item(categorie);
+CREATE INDEX IF NOT EXISTS idx_imv2_template_piece ON imv2_template_piece_item(type_piece_id);

@@ -78,6 +78,16 @@ export interface LotMandataire {
   telephone?: string;
 }
 
+export interface LotDernierLocataire {
+  tiers_id: string;
+  nom_complet: string;
+  type: 'physique' | 'morale';
+  email?: string;
+  telephone?: string;
+  date_edl?: string;
+  sens?: 'entree' | 'sortie';
+}
+
 export interface LotDetail extends Lot {
   batiment: {
     id: string;
@@ -95,4 +105,5 @@ export interface LotDetail extends Lot {
   mandataire_id?: string;
   proprietaires?: LotProprietaire[];
   mandataire?: LotMandataire | null;
+  dernier_locataire?: LotDernierLocataire | null;
 }

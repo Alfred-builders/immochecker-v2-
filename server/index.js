@@ -20,6 +20,8 @@ import lotsRoutes from './routes/lots.js';
 import importRoutes from './routes/import.js';
 import tiersRoutes from './routes/tiers.js';
 import missionsRoutes from './routes/missions.js';
+import searchRoutes from './routes/search.js';
+import templatesRoutes from './routes/templates.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -44,6 +46,8 @@ app.use('/api/lots', verifyToken, lotsRoutes);
 app.use('/api/import', verifyToken, importRoutes);
 app.use('/api/tiers', verifyToken, tiersRoutes);
 app.use('/api/missions', verifyToken, missionsRoutes);
+app.use('/api/search', verifyToken, searchRoutes);
+app.use('/api/templates', verifyToken, templatesRoutes);
 
 // ─── 404 catch-all for /api/* ───────────────────────────────────
 app.all('/api/*', (_req, res) => {

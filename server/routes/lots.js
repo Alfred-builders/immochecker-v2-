@@ -170,7 +170,24 @@ router.get('/:id', async (req, res) => {
                 )
                 FROM imv2_tiers t
                 WHERE t.id = l.mandataire_id
-              ) AS mandataire
+              ) AS mandataire,
+              (
+                SELECT jsonb_build_object(
+                  'tiers_id', t.id,
+                  'nom_complet', COALESCE(t.raison_sociale, TRIM(CONCAT(COALESCE(t.prenom,''), ' ', COALESCE(t.nom,'')))),
+                  'type', t.type,
+                  'email', t.email,
+                  'telephone', t.telephone,
+                  'date_edl', e.created_at,
+                  'sens', e.sens
+                )
+                FROM imv2_edl_locataire el
+                JOIN imv2_edl_inventaire e ON e.id = el.edl_id
+                JOIN imv2_tiers t ON t.id = el.tiers_id
+                WHERE e.lot_id = l.id
+                ORDER BY e.created_at DESC
+                LIMIT 1
+              ) AS dernier_locataire
        FROM imv2_lot l
        JOIN imv2_batiment b ON b.id = l.batiment_id
        WHERE l.id = $1 AND l.workspace_id = $2`,

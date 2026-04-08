@@ -11,6 +11,7 @@ import {
   LogOut,
   User,
   ChevronDown,
+  Search,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -23,6 +24,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
+import { GlobalSearch } from '@/components/global-search';
 
 interface NavItem {
   label: string;
@@ -38,7 +40,7 @@ const NAV_GROUPS: { title: string; items: NavItem[] }[] = [
     items: [
       { label: 'Parc immobilier', href: '/app/patrimoine', icon: Building2 },
       { label: 'Tiers', href: '/app/tiers', icon: Users },
-      { label: 'Templates', href: '/app/templates', icon: FileText, disabled: true, badge: 'Bientôt' },
+      { label: 'Templates', href: '/app/templates', icon: FileText },
     ],
   },
   {
@@ -65,6 +67,7 @@ const WORKSPACE_TYPE_LABELS: Record<string, string> = {
 export function MainLayout() {
   const [hovered, setHovered] = useState(false);
   const collapsed = !hovered;
+  const [searchOpen, setSearchOpen] = useState(false);
   const { user, workspace, logout } = useAuth();
   const location = useLocation();
 
@@ -121,6 +124,20 @@ export function MainLayout() {
                 </p>
               </motion.div>
             )}
+          </div>
+
+
+          {/* Search button */}
+          <div className="px-3 pb-2">
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="flex w-full items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted"
+            >
+              <Search className="h-4 w-4 shrink-0" />
+              {!collapsed && (
+                <span className="flex-1 text-left text-xs">Rechercher...</span>
+              )}
+            </button>
           </div>
 
           {/* Navigation */}
@@ -279,6 +296,7 @@ export function MainLayout() {
           </main>
         </div>
       </div>
+      <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
     </TooltipProvider>
   );
 }

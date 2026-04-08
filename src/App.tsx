@@ -15,6 +15,7 @@ import { TiersDetailPage } from '@/features/tiers/tiers-detail-page';
 import { MissionsPage } from '@/features/missions/missions-page';
 import { MissionDetailPage } from '@/features/missions/mission-detail-page';
 import { DashboardPage } from '@/features/dashboard/dashboard-page';
+import { TemplatesPage } from '@/features/templates/templates-page';
 
 // ---------------------------------------------------------------------------
 // Protected route wrapper
@@ -67,6 +68,7 @@ export function App() {
           <Route path="/app/tiers/:id" element={<TiersDetailPage />} />
           <Route path="/app/missions" element={<MissionsPage />} />
           <Route path="/app/missions/:id" element={<MissionDetailPage />} />
+          <Route path="/app/templates" element={<TemplatesPage />} />
           <Route path="/app/parametres" element={<SettingsPage />} />
         </Route>
       </Route>
