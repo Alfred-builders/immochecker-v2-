@@ -10,6 +10,8 @@ import { PatrimoinePage } from '@/features/patrimoine/patrimoine-page';
 import { BatimentDetailPage } from '@/features/patrimoine/batiment-detail-page';
 import { LotDetailPage } from '@/features/patrimoine/lot-detail-page';
 import { SettingsPage } from '@/features/admin/settings-page';
+import { TiersPage } from '@/features/tiers/tiers-page';
+import { TiersDetailPage } from '@/features/tiers/tiers-detail-page';
 
 // ---------------------------------------------------------------------------
 // Protected route wrapper
@@ -57,6 +59,8 @@ export function App() {
             element={<BatimentDetailPage />}
           />
           <Route path="/app/patrimoine/lots/:id" element={<LotDetailPage />} />
+          <Route path="/app/tiers" element={<TiersPage />} />
+          <Route path="/app/tiers/:id" element={<TiersDetailPage />} />
           <Route path="/app/parametres" element={<SettingsPage />} />
         </Route>
       </Route>

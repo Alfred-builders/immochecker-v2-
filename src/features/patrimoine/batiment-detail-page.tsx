@@ -55,6 +55,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
+import { AddressAutocomplete, type AddressResult } from '@/components/address-autocomplete';
 import { useBatiment, useUpdateBatiment, useArchiveBatiment } from './api';
 import { CreateLotDialog } from './create-lot-dialog';
 import type { Adresse, Lot } from './types';
@@ -637,21 +638,16 @@ export function BatimentDetailPage() {
                             </Button>
                           )}
                         </div>
-                        <FormField
-                          control={form.control}
-                          name={`adresses.${index}.rue`}
-                          render={({ field: f }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  placeholder="Rue"
-                                  className="h-8 text-sm"
-                                  {...f}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
+                        <AddressAutocomplete
+                          placeholder="Rechercher une adresse..."
+                          inputClassName="h-8 text-sm"
+                          value={form.watch(`adresses.${index}.rue`)}
+                          onSelect={(result: AddressResult) => {
+                            form.setValue(`adresses.${index}.rue`, result.rue);
+                            form.setValue(`adresses.${index}.code_postal`, result.code_postal);
+                            form.setValue(`adresses.${index}.ville`, result.ville);
+                          }}
+                          onChange={(val) => form.setValue(`adresses.${index}.rue`, val)}
                         />
                         <FormField
                           control={form.control}

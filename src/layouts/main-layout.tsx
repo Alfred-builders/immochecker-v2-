@@ -37,7 +37,7 @@ const NAV_GROUPS: { title: string; items: NavItem[] }[] = [
     title: 'Référentiel',
     items: [
       { label: 'Parc immobilier', href: '/app/patrimoine', icon: Building2 },
-      { label: 'Tiers', href: '/app/tiers', icon: Users, disabled: true, badge: 'Bientôt' },
+      { label: 'Tiers', href: '/app/tiers', icon: Users },
       { label: 'Templates', href: '/app/templates', icon: FileText, disabled: true, badge: 'Bientôt' },
     ],
   },

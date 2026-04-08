@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+import { AddressAutocomplete, type AddressResult } from '@/components/address-autocomplete';
 import { useCreateHouse } from './api';
 
 // ---------------------------------------------------------------------------
@@ -160,19 +161,24 @@ export function CreateHouseDialog({
               initial="hidden"
               animate="visible"
             >
-              <FormField
-                control={form.control}
-                name="rue"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Rue *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="12 rue des Acacias" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+              <FormItem>
+                <FormLabel>Adresse *</FormLabel>
+                <AddressAutocomplete
+                  placeholder="Rechercher une adresse..."
+                  value={form.watch('rue')}
+                  onSelect={(result: AddressResult) => {
+                    form.setValue('rue', result.rue, { shouldValidate: true });
+                    form.setValue('code_postal', result.code_postal, { shouldValidate: true });
+                    form.setValue('ville', result.ville, { shouldValidate: true });
+                  }}
+                  onChange={(val) => form.setValue('rue', val)}
+                />
+                {form.formState.errors.rue && (
+                  <p className="text-sm font-medium text-destructive">
+                    {form.formState.errors.rue.message}
+                  </p>
                 )}
-              />
+              </FormItem>
             </motion.div>
 
             <motion.div
