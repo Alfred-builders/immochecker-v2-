@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -8,6 +8,8 @@ import {
   Calendar,
   LayoutDashboard,
   Settings,
+  Pin,
+  PinOff,
   LogOut,
   User,
   ChevronDown,
@@ -36,40 +38,57 @@ interface NavItem {
 
 const NAV_GROUPS: { title: string; items: NavItem[] }[] = [
   {
-    title: 'Référentiel',
+    title: 'Operationnel',
     items: [
-      { label: 'Parc immobilier', href: '/app/patrimoine', icon: Building2 },
-      { label: 'Tiers', href: '/app/tiers', icon: Users },
-      { label: 'Templates', href: '/app/templates', icon: FileText },
+      { label: 'Tableau de bord', href: '/app/dashboard', icon: LayoutDashboard },
+      { label: 'Missions', href: '/app/missions', icon: Calendar },
     ],
   },
   {
-    title: 'Opérationnel',
+    title: 'Referentiel',
     items: [
-      { label: 'Missions', href: '/app/missions', icon: Calendar, disabled: true, badge: 'Bientôt' },
-      { label: 'Tableau de bord', href: '/app/dashboard', icon: LayoutDashboard, disabled: true, badge: 'Bientôt' },
+      { label: 'Parc immobilier', href: '/app/patrimoine', icon: Building2 },
+      { label: 'Tiers', href: '/app/tiers', icon: Users },
     ],
   },
   {
     title: 'Administration',
     items: [
-      { label: 'Paramètres', href: '/app/parametres', icon: Settings },
+      { label: 'Templates', href: '/app/templates', icon: FileText },
+      { label: 'Parametres', href: '/app/parametres', icon: Settings },
     ],
   },
 ];
 
 const WORKSPACE_TYPE_LABELS: Record<string, string> = {
-  societe_edl: "Société d'EDL",
+  societe_edl: "Societe d'EDL",
   bailleur: 'Bailleur',
-  agence: 'Agence immobilière',
+  agence: 'Agence immobiliere',
 };
 
 export function MainLayout() {
+  const [pinned, setPinned] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const collapsed = !hovered;
   const [searchOpen, setSearchOpen] = useState(false);
   const { user, workspace, logout } = useAuth();
   const location = useLocation();
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const collapsed = !pinned && !hovered;
+
+  const handleMouseEnter = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setHovered(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHovered(false);
+    }, 200);
+  }, []);
 
   const userInitials = user
     ? `${user.prenom?.[0] ?? ''}${user.nom?.[0] ?? ''}`.toUpperCase()
@@ -92,11 +111,11 @@ export function MainLayout() {
 
         {/* Sidebar — overlays content on hover */}
         <motion.aside
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
           initial={false}
           animate={{ width: collapsed ? 72 : 260 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           className="fixed left-0 top-0 z-30 flex h-screen flex-col border-r border-[#e2e8f0] bg-white shadow-lg"
         >
           {/* Workspace header */}
@@ -232,6 +251,25 @@ export function MainLayout() {
             ))}
           </nav>
 
+          {/* Pin toggle -- only visible when sidebar is expanded */}
+          {!collapsed && (
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              onClick={() => setPinned(!pinned)}
+              className="absolute -right-3 top-20 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card shadow-sm transition-colors hover:bg-muted/50"
+              title={pinned ? 'Detacher la barre' : 'Epingler la barre'}
+            >
+              {pinned ? (
+                <PinOff className="h-3 w-3 text-muted-foreground" />
+              ) : (
+                <Pin className="h-3 w-3 text-muted-foreground" />
+              )}
+            </motion.button>
+          )}
+
           {/* Footer: user info */}
           <div className="border-t border-[#e2e8f0] p-3">
             <DropdownMenu>
@@ -276,7 +314,7 @@ export function MainLayout() {
                   className="cursor-pointer text-destructive focus:text-destructive"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  Se déconnecter
+                  Se deconnecter
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -310,9 +348,9 @@ function Breadcrumbs() {
 
   const LABELS: Record<string, string> = {
     patrimoine: 'Parc immobilier',
-    batiments: 'Bâtiment',
+    batiments: 'Batiment',
     lots: 'Lot',
-    parametres: 'Paramètres',
+    parametres: 'Parametres',
     tiers: 'Tiers',
     templates: 'Templates',
     missions: 'Missions',
