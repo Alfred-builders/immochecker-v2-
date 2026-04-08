@@ -105,11 +105,11 @@ export function InviteAcceptPage() {
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
-      <Card className="w-full max-w-[420px] border-[#e2e8f0] shadow-sm">
+      <Card className="w-full max-w-[420px] border-border shadow-sm">
         {/* Loading state */}
         {pageState === 'loading' && (
           <CardContent className="flex flex-col items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-[#2563eb]" />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <p className="mt-4 text-sm text-muted-foreground">
               Chargement de l'invitation...
             </p>
@@ -161,7 +161,7 @@ export function InviteAcceptPage() {
             <CardHeader className="text-center">
               <div className="flex items-center justify-center gap-0.5 text-2xl font-bold tracking-tight">
                 <span className="text-foreground">Immo</span>
-                <span className="text-[#2563eb]">Checker</span>
+                <span className="text-primary">Checker</span>
               </div>
               <CardTitle className="mt-4 text-lg">
                 Rejoindre {inviteInfo.workspaceName}
@@ -174,7 +174,7 @@ export function InviteAcceptPage() {
 
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <CardContent className="space-y-4">
-                <div className="rounded-lg bg-[#f8fafc] p-3 text-center">
+                <div className="rounded-lg bg-muted/50 p-3 text-center">
                   <p className="text-sm text-muted-foreground">
                     Vous serez connecté avec
                   </p>
@@ -192,7 +192,7 @@ export function InviteAcceptPage() {
                           id="inv-nom"
                           placeholder="Dupont"
                           autoComplete="family-name"
-                          className="bg-[#f8fafc] border-[#e2e8f0]"
+                          className="bg-muted/50 border-border"
                           {...form.register('nom')}
                         />
                         {form.formState.errors.nom && (
@@ -207,7 +207,7 @@ export function InviteAcceptPage() {
                           id="inv-prenom"
                           placeholder="Jean"
                           autoComplete="given-name"
-                          className="bg-[#f8fafc] border-[#e2e8f0]"
+                          className="bg-muted/50 border-border"
                           {...form.register('prenom')}
                         />
                         {form.formState.errors.prenom && (
@@ -225,7 +225,7 @@ export function InviteAcceptPage() {
                         type="password"
                         placeholder="8 caractères minimum"
                         autoComplete="new-password"
-                        className="bg-[#f8fafc] border-[#e2e8f0]"
+                        className="bg-muted/50 border-border"
                         {...form.register('password')}
                       />
                       {form.formState.errors.password && (
@@ -240,7 +240,7 @@ export function InviteAcceptPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#2563eb] hover:bg-[#1d4ed8]"
+                  className="w-full bg-primary hover:bg-primary/90"
                 >
                   {isSubmitting && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

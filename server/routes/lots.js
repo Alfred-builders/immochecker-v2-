@@ -126,6 +126,7 @@ router.get('/:id', async (req, res) => {
               l.chauffage_type, l.chauffage_mode, l.eau_chaude_type, l.eau_chaude_mode,
               l.dpe_classe, l.ges_classe, l.num_parking, l.num_cave,
               l.commentaire, l.est_archive, l.created_at, l.updated_at,
+              l.mandataire_id,
               jsonb_build_object(
                 'id', b.id,
                 'designation', b.designation,
@@ -144,7 +145,32 @@ router.get('/:id', async (req, res) => {
                 WHERE ab.batiment_id = b.id
                 ORDER BY ab.ordre ASC NULLS LAST, ab.created_at ASC
                 LIMIT 1
-              ) AS adresse_principale
+              ) AS adresse_principale,
+              (
+                SELECT COALESCE(jsonb_agg(jsonb_build_object(
+                  'tiers_id', t.id,
+                  'nom_complet', COALESCE(t.raison_sociale, TRIM(CONCAT(COALESCE(t.prenom,''), ' ', COALESCE(t.nom,'')))),
+                  'type', t.type,
+                  'email', t.email,
+                  'telephone', t.telephone,
+                  'date_debut', lp.date_debut,
+                  'date_fin', lp.date_fin
+                )), '[]'::jsonb)
+                FROM imv2_lot_proprietaire lp
+                JOIN imv2_tiers t ON t.id = lp.tiers_id
+                WHERE lp.lot_id = l.id
+              ) AS proprietaires,
+              (
+                SELECT jsonb_build_object(
+                  'tiers_id', t.id,
+                  'nom_complet', COALESCE(t.raison_sociale, TRIM(CONCAT(COALESCE(t.prenom,''), ' ', COALESCE(t.nom,'')))),
+                  'type', t.type,
+                  'email', t.email,
+                  'telephone', t.telephone
+                )
+                FROM imv2_tiers t
+                WHERE t.id = l.mandataire_id
+              ) AS mandataire
        FROM imv2_lot l
        JOIN imv2_batiment b ON b.id = l.batiment_id
        WHERE l.id = $1 AND l.workspace_id = $2`,
@@ -158,6 +184,99 @@ router.get('/:id', async (req, res) => {
     res.json({ lot });
   } catch (err) {
     console.error('[Lot] Get error:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// ─── POST /:id/proprietaires — Link tiers as owner ────────────
+router.post('/:id/proprietaires', async (req, res) => {
+  try {
+    const wsId = req.user.workspaceId;
+    const lotId = req.params.id;
+    const { tiers_id, date_debut, date_fin } = req.body;
+
+    if (!tiers_id) return res.status(400).json({ error: 'tiers_id requis' });
+
+    const lot = await queryOne(
+      'SELECT id FROM imv2_lot WHERE id=$1 AND workspace_id=$2',
+      [lotId, wsId]
+    );
+    if (!lot) return res.status(404).json({ error: 'Lot non trouvé' });
+
+    const tiers = await queryOne(
+      'SELECT id FROM imv2_tiers WHERE id=$1 AND workspace_id=$2',
+      [tiers_id, wsId]
+    );
+    if (!tiers) return res.status(404).json({ error: 'Tiers non trouvé' });
+
+    const link = await queryOne(
+      `INSERT INTO imv2_lot_proprietaire (lot_id, tiers_id, date_debut, date_fin)
+       VALUES ($1,$2,$3,$4)
+       ON CONFLICT (lot_id, tiers_id) DO UPDATE SET date_debut=$3, date_fin=$4
+       RETURNING *`,
+      [lotId, tiers_id, date_debut || null, date_fin || null]
+    );
+
+    res.status(201).json(link);
+  } catch (err) {
+    console.error('[Lot] Link proprietaire error:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// ─── DELETE /:id/proprietaires/:tiersId — Unlink owner ────────
+router.delete('/:id/proprietaires/:tiersId', async (req, res) => {
+  try {
+    const wsId = req.user.workspaceId;
+    const { id: lotId, tiersId } = req.params;
+
+    const lot = await queryOne(
+      'SELECT id FROM imv2_lot WHERE id=$1 AND workspace_id=$2',
+      [lotId, wsId]
+    );
+    if (!lot) return res.status(404).json({ error: 'Lot non trouvé' });
+
+    await query(
+      'DELETE FROM imv2_lot_proprietaire WHERE lot_id=$1 AND tiers_id=$2',
+      [lotId, tiersId]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[Lot] Unlink proprietaire error:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// ─── PUT /:id/mandataire — Set or clear mandataire ────────────
+router.put('/:id/mandataire', async (req, res) => {
+  try {
+    const wsId = req.user.workspaceId;
+    const lotId = req.params.id;
+    const { tiers_id } = req.body; // null to clear
+
+    const lot = await queryOne(
+      'SELECT id FROM imv2_lot WHERE id=$1 AND workspace_id=$2',
+      [lotId, wsId]
+    );
+    if (!lot) return res.status(404).json({ error: 'Lot non trouvé' });
+
+    if (tiers_id) {
+      const tiers = await queryOne(
+        'SELECT id FROM imv2_tiers WHERE id=$1 AND workspace_id=$2',
+        [tiers_id, wsId]
+      );
+      if (!tiers) return res.status(404).json({ error: 'Tiers non trouvé' });
+    }
+
+    await query(
+      'UPDATE imv2_lot SET mandataire_id=$1, updated_at=NOW() WHERE id=$2 AND workspace_id=$3',
+      [tiers_id || null, lotId, wsId]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[Lot] Set mandataire error:', err);
     res.status(500).json({ error: 'Erreur serveur' });
   }
 });

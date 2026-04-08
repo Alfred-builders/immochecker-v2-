@@ -55,14 +55,14 @@ function SortIndicator({ direction }: { direction: SortDirection }) {
   return (
     <span className="ml-1 inline-flex flex-col leading-none">
       <svg
-        className={`h-2 w-2 ${direction === 'asc' ? 'text-blue-600' : 'text-muted-foreground/30'}`}
+        className={`h-2 w-2 ${direction === 'asc' ? 'text-primary' : 'text-muted-foreground/30'}`}
         viewBox="0 0 8 5"
         fill="currentColor"
       >
         <path d="M4 0L8 5H0L4 0Z" />
       </svg>
       <svg
-        className={`h-2 w-2 ${direction === 'desc' ? 'text-blue-600' : 'text-muted-foreground/30'}`}
+        className={`h-2 w-2 ${direction === 'desc' ? 'text-primary' : 'text-muted-foreground/30'}`}
         viewBox="0 0 8 5"
         fill="currentColor"
       >
@@ -217,7 +217,7 @@ export function DataTable<T>({
             <Filter className="h-3.5 w-3.5" />
             Filtres
             {filters.length > 0 && (
-              <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-medium text-white">
+              <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
                 {filters.length}
               </span>
             )}
@@ -255,7 +255,7 @@ export function DataTable<T>({
       </AnimatePresence>
 
       {/* Table */}
-      <div className="rounded-lg border bg-white">
+      <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">

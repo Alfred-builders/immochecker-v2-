@@ -60,6 +60,24 @@ export interface Lot {
   adresse_principale?: { rue: string; complement?: string; code_postal: string; ville: string } | null;
 }
 
+export interface LotProprietaire {
+  tiers_id: string;
+  nom_complet: string;
+  type: 'physique' | 'morale';
+  email?: string;
+  telephone?: string;
+  date_debut?: string;
+  date_fin?: string;
+}
+
+export interface LotMandataire {
+  tiers_id: string;
+  nom_complet: string;
+  type: 'physique' | 'morale';
+  email?: string;
+  telephone?: string;
+}
+
 export interface LotDetail extends Lot {
   batiment: {
     id: string;
@@ -74,4 +92,7 @@ export interface LotDetail extends Lot {
   num_cave?: string;
   emplacement_palier?: string;
   nb_pieces_precision?: string;
+  mandataire_id?: string;
+  proprietaires?: LotProprietaire[];
+  mandataire?: LotMandataire | null;
 }

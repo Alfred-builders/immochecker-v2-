@@ -97,11 +97,11 @@ export function LoginPage() {
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
-      <Card className="w-full max-w-[420px] border-[#e2e8f0] shadow-sm">
+      <Card className="w-full max-w-[420px] border-border shadow-sm">
         <CardHeader className="space-y-2 text-center">
           <div className="flex items-center justify-center gap-0.5 text-2xl font-bold tracking-tight">
             <span className="text-foreground">Immo</span>
-            <span className="text-[#2563eb]">Checker</span>
+            <span className="text-primary">Checker</span>
           </div>
           <CardDescription className="text-sm text-muted-foreground">
             Gestion d'états des lieux simplifiée
@@ -117,7 +117,7 @@ export function LoginPage() {
                 value={selectedWorkspace}
                 onValueChange={setSelectedWorkspace}
               >
-                <SelectTrigger className="bg-[#f8fafc] border-[#e2e8f0]">
+                <SelectTrigger className="bg-muted/50 border-border">
                   <SelectValue placeholder="Sélectionner un workspace" />
                 </SelectTrigger>
                 <SelectContent>
@@ -132,7 +132,7 @@ export function LoginPage() {
             <Button
               onClick={handleWorkspaceSelect}
               disabled={!selectedWorkspace || isSubmitting}
-              className="w-full bg-[#2563eb] hover:bg-[#1d4ed8]"
+              className="w-full bg-primary hover:bg-primary/90"
             >
               {isSubmitting && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -151,7 +151,7 @@ export function LoginPage() {
                   type="email"
                   placeholder="nom@exemple.com"
                   autoComplete="email"
-                  className="bg-[#f8fafc] border-[#e2e8f0]"
+                  className="bg-muted/50 border-border"
                   {...form.register('email')}
                 />
                 {form.formState.errors.email && (
@@ -168,7 +168,7 @@ export function LoginPage() {
                   type="password"
                   placeholder="Votre mot de passe"
                   autoComplete="current-password"
-                  className="bg-[#f8fafc] border-[#e2e8f0]"
+                  className="bg-muted/50 border-border"
                   {...form.register('password')}
                 />
                 {form.formState.errors.password && (
@@ -181,7 +181,7 @@ export function LoginPage() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#2563eb] hover:bg-[#1d4ed8]"
+                className="w-full bg-primary hover:bg-primary/90"
               >
                 {isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -197,7 +197,7 @@ export function LoginPage() {
             Pas encore de compte ?{' '}
             <Link
               to="/register"
-              className="font-medium text-[#2563eb] hover:underline"
+              className="font-medium text-primary hover:underline"
             >
               Créer un compte
             </Link>

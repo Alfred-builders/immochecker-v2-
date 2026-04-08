@@ -92,11 +92,11 @@ export function RegisterPage() {
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
-      <Card className="w-full max-w-[480px] border-[#e2e8f0] shadow-sm">
+      <Card className="w-full max-w-[480px] border-border shadow-sm">
         <CardHeader className="space-y-2 text-center">
           <div className="flex items-center justify-center gap-0.5 text-2xl font-bold tracking-tight">
             <span className="text-foreground">Immo</span>
-            <span className="text-[#2563eb]">Checker</span>
+            <span className="text-primary">Checker</span>
           </div>
           <p className="text-sm text-muted-foreground">
             Créez votre espace de travail
@@ -113,7 +113,7 @@ export function RegisterPage() {
                   id="nom"
                   placeholder="Dupont"
                   autoComplete="family-name"
-                  className="bg-[#f8fafc] border-[#e2e8f0]"
+                  className="bg-muted/50 border-border"
                   {...form.register('nom')}
                 />
                 {form.formState.errors.nom && (
@@ -128,7 +128,7 @@ export function RegisterPage() {
                   id="prenom"
                   placeholder="Jean"
                   autoComplete="given-name"
-                  className="bg-[#f8fafc] border-[#e2e8f0]"
+                  className="bg-muted/50 border-border"
                   {...form.register('prenom')}
                 />
                 {form.formState.errors.prenom && (
@@ -147,7 +147,7 @@ export function RegisterPage() {
                 type="email"
                 placeholder="nom@exemple.com"
                 autoComplete="email"
-                className="bg-[#f8fafc] border-[#e2e8f0]"
+                className="bg-muted/50 border-border"
                 {...form.register('email')}
               />
               {form.formState.errors.email && (
@@ -165,7 +165,7 @@ export function RegisterPage() {
                 type="password"
                 placeholder="8 caractères minimum"
                 autoComplete="new-password"
-                className="bg-[#f8fafc] border-[#e2e8f0]"
+                className="bg-muted/50 border-border"
                 {...form.register('password')}
               />
               {form.formState.errors.password && (
@@ -181,7 +181,7 @@ export function RegisterPage() {
               <Input
                 id="workspaceName"
                 placeholder="Ma société"
-                className="bg-[#f8fafc] border-[#e2e8f0]"
+                className="bg-muted/50 border-border"
                 {...form.register('workspaceName')}
               />
               {form.formState.errors.workspaceName && (
@@ -202,7 +202,7 @@ export function RegisterPage() {
                   })
                 }
               >
-                <SelectTrigger className="bg-[#f8fafc] border-[#e2e8f0]">
+                <SelectTrigger className="bg-muted/50 border-border">
                   <SelectValue placeholder="Sélectionner un type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -223,7 +223,7 @@ export function RegisterPage() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#2563eb] hover:bg-[#1d4ed8]"
+              className="w-full bg-primary hover:bg-primary/90"
             >
               {isSubmitting && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -238,7 +238,7 @@ export function RegisterPage() {
             Déjà un compte ?{' '}
             <Link
               to="/login"
-              className="font-medium text-[#2563eb] hover:underline"
+              className="font-medium text-primary hover:underline"
             >
               Se connecter
             </Link>

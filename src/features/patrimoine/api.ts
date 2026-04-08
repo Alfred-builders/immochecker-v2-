@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiGet, apiPost, apiPut, apiPatch } from '@/lib/api';
+import { apiGet, apiPost, apiPut, apiPatch, apiDelete } from '@/lib/api';
 import type { Batiment, BatimentDetail, Lot, LotDetail } from './types';
 
 // ---------------------------------------------------------------------------
@@ -172,6 +172,52 @@ export function useArchiveLot() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: keys.lots });
       qc.invalidateQueries({ queryKey: keys.batiments });
+    },
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Lot tiers associations (proprietaires + mandataire)
+// ---------------------------------------------------------------------------
+
+export function useLinkProprietaireToLot() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      lotId,
+      tiers_id,
+      date_debut,
+      date_fin,
+    }: {
+      lotId: string;
+      tiers_id: string;
+      date_debut?: string;
+      date_fin?: string;
+    }) => apiPost(`/lots/${lotId}/proprietaires`, { tiers_id, date_debut, date_fin }),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: keys.lot(vars.lotId) });
+    },
+  });
+}
+
+export function useUnlinkProprietaireFromLot() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ lotId, tiersId }: { lotId: string; tiersId: string }) =>
+      apiDelete(`/lots/${lotId}/proprietaires/${tiersId}`),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: keys.lot(vars.lotId) });
+    },
+  });
+}
+
+export function useSetLotMandataire() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ lotId, tiers_id }: { lotId: string; tiers_id: string | null }) =>
+      apiPut(`/lots/${lotId}/mandataire`, { tiers_id }),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: keys.lot(vars.lotId) });
     },
   });
 }

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "dev:server": "node --watch server/index.js",
+    "dev:server": "node --env-file=.env --watch server/index.js",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "migrate": "node server/db/migrate.js",
@@ -56,6 +56,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/mapbox-gl": "^3.4.1",
     "@types/node": "^22.10.0",
     "@types/react": "^18.3.14",
     "@types/react-dom": "^18.3.3",

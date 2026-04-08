@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -99,20 +99,20 @@ const BUILDING_TYPES = [
 ];
 
 const TYPE_BADGE_CLASSES: Record<string, string> = {
-  immeuble: 'bg-blue-100 text-blue-700 border-blue-200',
-  maison: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  commercial: 'bg-amber-100 text-amber-700 border-amber-200',
-  mixte: 'bg-purple-100 text-purple-700 border-purple-200',
+  immeuble: 'bg-primary/10 text-primary border-primary/20',
+  maison: 'bg-success/10 text-success border-success/20',
+  commercial: 'bg-warning/10 text-warning border-warning/20',
+  mixte: 'bg-secondary text-secondary-foreground border-border',
 };
 
 const LOT_TYPE_BADGE: Record<string, string> = {
-  appartement: 'bg-blue-100 text-blue-700 border-blue-200',
-  studio: 'bg-indigo-100 text-indigo-700 border-indigo-200',
-  maison: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  local_commercial: 'bg-amber-100 text-amber-700 border-amber-200',
-  parking: 'bg-slate-100 text-slate-700 border-slate-200',
-  cave: 'bg-stone-100 text-stone-700 border-stone-200',
-  bureau: 'bg-violet-100 text-violet-700 border-violet-200',
+  appartement: 'bg-primary/10 text-primary border-primary/20',
+  studio: 'bg-primary/20 text-primary border-primary/30',
+  maison: 'bg-success/10 text-success border-success/20',
+  local_commercial: 'bg-warning/10 text-warning border-warning/20',
+  parking: 'bg-muted text-muted-foreground border-border',
+  cave: 'bg-muted text-muted-foreground border-border',
+  bureau: 'bg-secondary text-secondary-foreground border-border',
 };
 
 // ---------------------------------------------------------------------------
@@ -143,7 +143,7 @@ function SuccessCheck() {
       animate={{ scale: [0, 1.2, 1], opacity: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ duration: 0.3, times: [0, 0.6, 1] }}
-      className="flex items-center gap-2 text-emerald-600"
+      className="flex items-center gap-2 text-success"
     >
       <Check className="h-5 w-5" />
       <span className="text-sm font-medium">Sauvegardé</span>
@@ -301,8 +301,8 @@ export function BatimentDetailPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2563EB]/10">
-            <Building2 className="h-5 w-5 text-[#2563EB]" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+            <Building2 className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-foreground">
@@ -353,7 +353,6 @@ export function BatimentDetailPage() {
               </Button>
               <Button
                 size="sm"
-                className="bg-[#2563EB] hover:bg-[#1d4ed8]"
                 onClick={form.handleSubmit(onSubmit)}
                 disabled={updateBatiment.isPending}
               >
@@ -367,8 +366,11 @@ export function BatimentDetailPage() {
       <Form {...form}>
         <div className="grid gap-6 lg:grid-cols-2">
           {/* --- Informations card --- */}
-          <Card className="p-5 space-y-1">
-            <h3 className="text-sm font-semibold mb-3">Informations</h3>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold">Informations</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
 
             <AnimatePresence mode="wait">
               {!editing ? (
@@ -509,12 +511,14 @@ export function BatimentDetailPage() {
                 </motion.div>
               )}
             </AnimatePresence>
+            </CardContent>
           </Card>
 
           {/* --- Adresses card --- */}
-          <Card className="p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Adresses</h3>
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-semibold">Adresses</CardTitle>
               {editing && (
                 <Button
                   type="button"
@@ -535,8 +539,9 @@ export function BatimentDetailPage() {
                   Ajouter
                 </Button>
               )}
-            </div>
-
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
             <AnimatePresence mode="wait">
               {!editing ? (
                 <motion.div
@@ -704,25 +709,27 @@ export function BatimentDetailPage() {
                 </motion.div>
               )}
             </AnimatePresence>
+            </CardContent>
           </Card>
         </div>
       </Form>
 
       {/* --- Lots section --- */}
-      <Card className="p-5 space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold">
+      <Card>
+        <CardHeader className="flex-row items-center justify-between pb-3 space-y-0">
+          <CardTitle className="text-sm font-semibold">
             Lots ({batiment.lots?.length ?? 0})
-          </h3>
+          </CardTitle>
           <Button
             size="sm"
-            className="gap-1.5 bg-[#2563EB] hover:bg-[#1d4ed8]"
+            className="gap-1.5"
             onClick={() => setLotDialogOpen(true)}
           >
             <Plus className="h-3.5 w-3.5" />
             Ajouter un lot
           </Button>
-        </div>
+        </CardHeader>
+        <CardContent className="pt-0">
 
         <div className="rounded-lg border">
           <Table>
@@ -774,7 +781,7 @@ export function BatimentDetailPage() {
                     {lot.meuble ? (
                       <Badge
                         variant="outline"
-                        className="bg-emerald-100 text-emerald-700 border-emerald-200"
+                        className="bg-success/10 text-success border-success/20"
                       >
                         Oui
                       </Badge>
@@ -797,6 +804,7 @@ export function BatimentDetailPage() {
             </TableBody>
           </Table>
         </div>
+        </CardContent>
       </Card>
 
       {/* --- Archive confirmation dialog --- */}

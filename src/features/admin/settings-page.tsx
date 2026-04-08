@@ -38,6 +38,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import {
+  Card, CardContent, CardHeader, CardTitle, CardDescription,
+} from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   Table,
@@ -104,11 +107,11 @@ const ROLES = [
 ];
 
 const ROLE_BADGE_CLASSES: Record<string, string> = {
-  admin: 'bg-blue-100 text-blue-700 border-blue-200',
-  owner: 'bg-purple-100 text-purple-700 border-purple-200',
-  editor: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  viewer: 'bg-slate-100 text-slate-600 border-slate-200',
-  member: 'bg-slate-100 text-slate-600 border-slate-200',
+  admin: 'bg-primary/10 text-primary border-primary/20',
+  owner: 'bg-secondary text-secondary-foreground border-border',
+  editor: 'bg-success/10 text-success border-success/20',
+  viewer: 'bg-muted text-muted-foreground border-border',
+  member: 'bg-muted text-muted-foreground border-border',
 };
 
 // ---------------------------------------------------------------------------
@@ -209,7 +212,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2563EB] border-t-transparent" />
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -217,16 +220,12 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
   const couleurValue = form.watch('couleur_primaire');
 
   return (
-    <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold text-foreground">
-          Informations du workspace
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Configurez les informations de votre espace de travail.
-        </p>
-      </div>
-
+    <Card>
+      <CardHeader>
+        <CardTitle>Informations du workspace</CardTitle>
+        <CardDescription>Configurez les informations de votre espace de travail.</CardDescription>
+      </CardHeader>
+      <CardContent>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           {/* Nom */}
@@ -424,7 +423,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
                   <FormLabel>Couleur primaire</FormLabel>
                   <div className="flex items-center gap-3">
                     <div
-                      className="h-9 w-9 shrink-0 rounded-md border border-[#e2e8f0]"
+                      className="h-9 w-9 shrink-0 rounded-md border border-border"
                       style={{
                         backgroundColor: couleurValue || '#2563EB',
                       }}
@@ -450,7 +449,7 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
             <Button
               type="submit"
               disabled={updateWorkspace.isPending}
-              className="gap-2 bg-[#2563EB] hover:bg-[#1d4ed8]"
+              className="gap-2"
             >
               <motion.div
                 key={saved ? 'check' : 'save'}
@@ -473,7 +472,8 @@ function InformationsTab({ workspaceId }: { workspaceId: string }) {
           </motion.div>
         </form>
       </Form>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -541,7 +541,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2563EB] border-t-transparent" />
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -549,16 +549,12 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
   return (
     <div className="space-y-6">
       {/* Invite form */}
-      <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-foreground">
-            Inviter un membre
-          </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Envoyez une invitation par email pour ajouter un nouveau membre.
-          </p>
-        </div>
-
+      <Card>
+        <CardHeader>
+          <CardTitle>Inviter un membre</CardTitle>
+          <CardDescription>Envoyez une invitation par email pour ajouter un nouveau membre.</CardDescription>
+        </CardHeader>
+        <CardContent>
         <Form {...inviteForm}>
           <form
             onSubmit={inviteForm.handleSubmit(onInvite)}
@@ -608,23 +604,23 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
             <Button
               type="submit"
               disabled={invite.isPending}
-              className="gap-2 bg-[#2563EB] hover:bg-[#1d4ed8]"
+              className="gap-2"
             >
               <UserPlus className="h-4 w-4" />
               {invite.isPending ? 'Envoi...' : 'Inviter'}
             </Button>
           </form>
         </Form>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Pending invitations */}
       {invitations && invitations.length > 0 && (
-        <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
-          <div className="mb-4">
-            <h2 className="text-lg font-semibold text-foreground">
-              Invitations en attente
-            </h2>
-          </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Invitations en attente</CardTitle>
+          </CardHeader>
+          <CardContent>
 
           <div className="space-y-2">
             <AnimatePresence mode="popLayout">
@@ -636,11 +632,11 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
                   animate="visible"
                   exit="exit"
                   layout
-                  className="flex items-center justify-between rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-4 py-3"
+                  className="flex items-center justify-between rounded-lg border border-border bg-muted/50 px-4 py-3"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2563EB]/10">
-                      <Mail className="h-4 w-4 text-[#2563EB]" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                      <Mail className="h-4 w-4 text-primary" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-foreground">
@@ -657,7 +653,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
                       variant="outline"
                       className={
                         ROLE_BADGE_CLASSES[inv.role] ??
-                        'bg-slate-100 text-slate-600 border-slate-200'
+                        'bg-muted text-muted-foreground border-border'
                       }
                     >
                       {inv.role}
@@ -676,19 +672,19 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
               ))}
             </AnimatePresence>
           </div>
-        </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* Members table */}
-      <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-foreground">
-            Membres de l'équipe
-          </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
+      <Card>
+        <CardHeader>
+          <CardTitle>Membres de l'équipe</CardTitle>
+          <CardDescription>
             {members?.length ?? 0} membre{(members?.length ?? 0) > 1 ? 's' : ''}
-          </p>
-        </div>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
 
         <Table>
           <TableHeader>
@@ -718,7 +714,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
-                          <AvatarFallback className="bg-[#2563EB]/10 text-xs font-medium text-[#2563EB]">
+                          <AvatarFallback className="bg-primary/10 text-xs font-medium text-primary">
                             {getInitials(member.prenom, member.nom)}
                           </AvatarFallback>
                         </Avatar>
@@ -745,7 +741,7 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
                           variant="outline"
                           className={
                             ROLE_BADGE_CLASSES[member.role] ??
-                            'bg-slate-100 text-slate-600 border-slate-200'
+                            'bg-muted text-muted-foreground border-border'
                           }
                         >
                           {member.role === 'owner' ? 'Propriétaire' : 'Admin'}
@@ -803,7 +799,8 @@ function EquipeTab({ workspaceId }: { workspaceId: string }) {
             </p>
           </div>
         )}
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -819,7 +816,7 @@ export function SettingsPage() {
     return (
       <AnimatedPage className="p-6">
         <div className="flex items-center justify-center py-16">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2563EB] border-t-transparent" />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
         </div>
       </AnimatedPage>
     );

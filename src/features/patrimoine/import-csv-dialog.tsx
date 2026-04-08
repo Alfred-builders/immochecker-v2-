@@ -163,9 +163,9 @@ export function ImportCSVDialog({ open, onOpenChange }: ImportCSVDialogProps) {
               key={s}
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 s === step
-                  ? 'w-8 bg-[#2563EB]'
+                  ? 'w-8 bg-primary'
                   : s < step
-                    ? 'w-4 bg-[#2563EB]/40'
+                    ? 'w-4 bg-primary/40'
                     : 'w-4 bg-muted'
               }`}
             />
@@ -194,13 +194,13 @@ export function ImportCSVDialog({ open, onOpenChange }: ImportCSVDialogProps) {
                   onClick={() => fileInputRef.current?.click()}
                   className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-10 transition-colors ${
                     dragOver
-                      ? 'border-[#2563EB] bg-blue-50'
+                      ? 'border-primary bg-blue-50'
                       : 'border-muted-foreground/20 hover:border-muted-foreground/40'
                   }`}
                 >
                   <Upload
                     className={`h-10 w-10 ${
-                      dragOver ? 'text-[#2563EB]' : 'text-muted-foreground/40'
+                      dragOver ? 'text-primary' : 'text-muted-foreground/40'
                     }`}
                   />
                   <div className="text-center">
@@ -235,7 +235,7 @@ export function ImportCSVDialog({ open, onOpenChange }: ImportCSVDialogProps) {
               >
                 {/* File info */}
                 <div className="flex items-center gap-3 rounded-lg border bg-muted/30 p-3">
-                  <FileText className="h-8 w-8 text-[#2563EB]" />
+                  <FileText className="h-8 w-8 text-primary" />
                   <div className="flex-1 min-w-0">
                     <p className="truncate text-sm font-medium">{file.name}</p>
                     <p className="text-xs text-muted-foreground">

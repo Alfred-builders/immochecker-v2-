@@ -12,6 +12,9 @@ import { LotDetailPage } from '@/features/patrimoine/lot-detail-page';
 import { SettingsPage } from '@/features/admin/settings-page';
 import { TiersPage } from '@/features/tiers/tiers-page';
 import { TiersDetailPage } from '@/features/tiers/tiers-detail-page';
+import { MissionsPage } from '@/features/missions/missions-page';
+import { MissionDetailPage } from '@/features/missions/mission-detail-page';
+import { DashboardPage } from '@/features/dashboard/dashboard-page';
 
 // ---------------------------------------------------------------------------
 // Protected route wrapper
@@ -22,8 +25,8 @@ function ProtectedRoute() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f1f5f9]">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2563eb] border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -52,7 +55,8 @@ export function App() {
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayout />}>
-          <Route path="/app" element={<Navigate to="/app/patrimoine" replace />} />
+          <Route path="/app" element={<Navigate to="/app/dashboard" replace />} />
+          <Route path="/app/dashboard" element={<DashboardPage />} />
           <Route path="/app/patrimoine" element={<PatrimoinePage />} />
           <Route
             path="/app/patrimoine/batiments/:id"
@@ -61,6 +65,8 @@ export function App() {
           <Route path="/app/patrimoine/lots/:id" element={<LotDetailPage />} />
           <Route path="/app/tiers" element={<TiersPage />} />
           <Route path="/app/tiers/:id" element={<TiersDetailPage />} />
+          <Route path="/app/missions" element={<MissionsPage />} />
+          <Route path="/app/missions/:id" element={<MissionDetailPage />} />
           <Route path="/app/parametres" element={<SettingsPage />} />
         </Route>
       </Route>

@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS imv2_lot (
 );
 
 -- ============================================
--- TIERS (US588–593, US806–810)
+-- TIERS (US588-593, US806-810)
 -- ============================================
 
 CREATE TABLE IF NOT EXISTS imv2_tiers (
@@ -208,6 +208,99 @@ CREATE TABLE IF NOT EXISTS imv2_archive_log (
 );
 
 -- ============================================
+-- MISSIONS + EDL (Sprint 3 — EPIC 13)
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS imv2_mission (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id UUID NOT NULL REFERENCES imv2_workspace(id) ON DELETE CASCADE,
+  lot_id UUID NOT NULL REFERENCES imv2_lot(id) ON DELETE RESTRICT,
+  reference VARCHAR(20) NOT NULL,
+  titre VARCHAR(255),
+  statut VARCHAR(20) NOT NULL DEFAULT 'planifiee'
+    CHECK (statut IN ('planifiee', 'assignee', 'terminee', 'annulee')),
+  statut_rdv VARCHAR(20) NOT NULL DEFAULT 'a_confirmer'
+    CHECK (statut_rdv IN ('a_confirmer', 'confirme', 'reporte')),
+  date_debut DATE,
+  heure_debut TIME,
+  date_fin DATE,
+  heure_fin TIME,
+  commentaire TEXT,
+  motif_annulation TEXT,
+  est_archive BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Sequence for mission references M-YYYY-XXXX
+CREATE SEQUENCE IF NOT EXISTS imv2_mission_seq;
+
+CREATE TABLE IF NOT EXISTS imv2_mission_technicien (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  mission_id UUID NOT NULL REFERENCES imv2_mission(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES imv2_utilisateur(id) ON DELETE CASCADE,
+  statut_invitation VARCHAR(20) NOT NULL DEFAULT 'en_attente'
+    CHECK (statut_invitation IN ('en_attente', 'accepte', 'refuse')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(mission_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS imv2_edl_inventaire (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id UUID NOT NULL REFERENCES imv2_workspace(id) ON DELETE CASCADE,
+  mission_id UUID REFERENCES imv2_mission(id) ON DELETE SET NULL,
+  lot_id UUID NOT NULL REFERENCES imv2_lot(id) ON DELETE RESTRICT,
+  sens VARCHAR(10) NOT NULL CHECK (sens IN ('entree', 'sortie')),
+  type_bail VARCHAR(15) NOT NULL DEFAULT 'individuel'
+    CHECK (type_bail IN ('individuel', 'collectif')),
+  statut VARCHAR(15) NOT NULL DEFAULT 'brouillon'
+    CHECK (statut IN ('brouillon', 'signe', 'infructueux')),
+  date_signature TIMESTAMPTZ,
+  code_acces VARCHAR(100),
+  commentaire TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- EDL locataire(s)
+CREATE TABLE IF NOT EXISTS imv2_edl_locataire (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  edl_id UUID NOT NULL REFERENCES imv2_edl_inventaire(id) ON DELETE CASCADE,
+  tiers_id UUID NOT NULL REFERENCES imv2_tiers(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(edl_id, tiers_id)
+);
+
+CREATE TABLE IF NOT EXISTS imv2_cle_mission (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  mission_id UUID NOT NULL REFERENCES imv2_mission(id) ON DELETE CASCADE,
+  edl_id UUID REFERENCES imv2_edl_inventaire(id) ON DELETE SET NULL,
+  type_cle VARCHAR(30) NOT NULL
+    CHECK (type_cle IN ('cle_principale','badge','boite_aux_lettres','parking','cave','digicode','autre')),
+  quantite INT NOT NULL DEFAULT 1,
+  statut VARCHAR(20) NOT NULL DEFAULT 'remise'
+    CHECK (statut IN ('remise', 'a_deposer', 'deposee')),
+  commentaire TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS imv2_indisponibilite_technicien (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES imv2_utilisateur(id) ON DELETE CASCADE,
+  workspace_id UUID NOT NULL REFERENCES imv2_workspace(id) ON DELETE CASCADE,
+  titre VARCHAR(255) NOT NULL DEFAULT 'Indisponible',
+  date_debut DATE NOT NULL,
+  heure_debut TIME,
+  date_fin DATE NOT NULL,
+  heure_fin TIME,
+  recurrence VARCHAR(20) CHECK (recurrence IN ('none', 'daily', 'weekly', 'monthly')),
+  recurrence_fin DATE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- ============================================
 -- INDEXES
 -- ============================================
 
@@ -231,3 +324,16 @@ CREATE INDEX IF NOT EXISTS idx_imv2_tiers_org_pm ON imv2_tiers_organisation(orga
 CREATE INDEX IF NOT EXISTS idx_imv2_lot_tiers_lot ON imv2_lot_tiers(lot_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_lot_tiers_tiers ON imv2_lot_tiers(tiers_id);
 CREATE INDEX IF NOT EXISTS idx_imv2_lot_tiers_role ON imv2_lot_tiers(lot_id, role);
+
+-- Missions indexes
+CREATE INDEX IF NOT EXISTS idx_imv2_mission_ws ON imv2_mission(workspace_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_mission_lot ON imv2_mission(lot_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_mission_statut ON imv2_mission(workspace_id, statut);
+CREATE INDEX IF NOT EXISTS idx_imv2_mission_date ON imv2_mission(workspace_id, date_debut);
+CREATE INDEX IF NOT EXISTS idx_imv2_mission_tech ON imv2_mission_technicien(mission_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_mission_tech_user ON imv2_mission_technicien(user_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_edl_mission ON imv2_edl_inventaire(mission_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_edl_lot ON imv2_edl_inventaire(lot_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_cle_mission ON imv2_cle_mission(mission_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_indispo_user ON imv2_indisponibilite_technicien(user_id, workspace_id);
+CREATE INDEX IF NOT EXISTS idx_imv2_indispo_dates ON imv2_indisponibilite_technicien(workspace_id, date_debut, date_fin);

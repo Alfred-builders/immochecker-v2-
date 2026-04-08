@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,6 +14,11 @@ import {
   Archive,
   Check,
   DoorOpen,
+  X,
+  Building2,
+  User,
+  Search,
+  CalendarDays,
 } from 'lucide-react';
 
 import { AnimatedPage } from '@/components/animated-page';
@@ -19,7 +26,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -46,7 +53,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { useLot, useUpdateLot, useArchiveLot } from './api';
+import { useLot, useUpdateLot, useArchiveLot, useLinkProprietaireToLot, useUnlinkProprietaireFromLot, useSetLotMandataire } from './api';
+import { useTiers } from '@/features/tiers/api';
+import { useMissions } from '@/features/missions/api';
+import { STATUT_LABELS, STATUT_COLORS } from '@/features/missions/types';
 
 // ---------------------------------------------------------------------------
 // Schema
@@ -104,13 +114,13 @@ const NB_PIECES_OPTIONS = [
 const DPE_CLASSES = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
 const TYPE_BADGE_CLASSES: Record<string, string> = {
-  appartement: 'bg-blue-100 text-blue-700 border-blue-200',
-  studio: 'bg-indigo-100 text-indigo-700 border-indigo-200',
-  maison: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  local_commercial: 'bg-amber-100 text-amber-700 border-amber-200',
-  parking: 'bg-slate-100 text-slate-700 border-slate-200',
-  cave: 'bg-stone-100 text-stone-700 border-stone-200',
-  bureau: 'bg-violet-100 text-violet-700 border-violet-200',
+  appartement: 'bg-primary/10 text-primary border-primary/20',
+  studio: 'bg-primary/20 text-primary border-primary/30',
+  maison: 'bg-success/10 text-success border-success/20',
+  local_commercial: 'bg-warning/10 text-warning border-warning/20',
+  parking: 'bg-muted text-muted-foreground border-border',
+  cave: 'bg-muted text-muted-foreground border-border',
+  bureau: 'bg-secondary text-secondary-foreground border-border',
 };
 
 const CHAUFFAGE_TYPES = [
@@ -127,13 +137,13 @@ const CHAUFFAGE_MODES = [
 ];
 
 const DPE_COLORS: Record<string, string> = {
-  A: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  B: 'bg-green-100 text-green-700 border-green-200',
-  C: 'bg-lime-100 text-lime-700 border-lime-200',
-  D: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-  E: 'bg-orange-100 text-orange-700 border-orange-200',
-  F: 'bg-red-100 text-red-700 border-red-200',
-  G: 'bg-rose-100 text-rose-800 border-rose-200',
+  A: 'bg-success/10 text-success border-success/20',
+  B: 'bg-success/20 text-success border-success/30',
+  C: 'bg-warning/10 text-warning border-warning/20',
+  D: 'bg-warning/20 text-warning border-warning/30',
+  E: 'bg-warning/30 text-warning border-warning/40',
+  F: 'bg-destructive/10 text-destructive border-destructive/20',
+  G: 'bg-destructive/20 text-destructive border-destructive/30',
 };
 
 // ---------------------------------------------------------------------------
@@ -164,7 +174,7 @@ function SuccessCheck() {
       animate={{ scale: [0, 1.2, 1], opacity: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ duration: 0.3, times: [0, 0.6, 1] }}
-      className="flex items-center gap-2 text-emerald-600"
+      className="flex items-center gap-2 text-success"
     >
       <Check className="h-5 w-5" />
       <span className="text-sm font-medium">Sauvegardé</span>
@@ -218,14 +228,79 @@ function CollapsibleSection({
 }
 
 // ---------------------------------------------------------------------------
+// TiersSearch — inline combobox for picking a tiers
+// ---------------------------------------------------------------------------
+
+function TiersSearch({
+  placeholder,
+  onSelect,
+  excludeIds = [],
+}: {
+  placeholder: string;
+  onSelect: (id: string, nom: string) => void;
+  excludeIds?: string[];
+}) {
+  const [search, setSearch] = useState('');
+  const [open, setOpen] = useState(false);
+  const { data: results = [] } = useTiers({ search });
+
+  const filtered = results.filter((t) => !excludeIds.includes(t.id));
+
+  return (
+    <div className="relative">
+      <div className="relative">
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+        <input
+          className="w-full h-8 pl-8 pr-3 text-sm rounded-md border bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+          placeholder={placeholder}
+          value={search}
+          onChange={(e) => { setSearch(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+        />
+      </div>
+      {open && filtered.length > 0 && (
+        <div className="absolute z-50 top-full mt-1 w-full rounded-md border bg-popover shadow-md overflow-hidden">
+          {filtered.slice(0, 6).map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-accent text-left"
+              onMouseDown={() => {
+                onSelect(t.id, t.nom_complet ?? '');
+                setSearch('');
+                setOpen(false);
+              }}
+            >
+              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted">
+                {t.type === 'morale'
+                  ? <Building2 className="h-3 w-3 text-muted-foreground" />
+                  : <User className="h-3 w-3 text-muted-foreground" />}
+              </div>
+              <span className="font-medium truncate">{t.nom_complet}</span>
+              {t.email && <span className="ml-auto text-xs text-muted-foreground truncate">{t.email}</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
 
 export function LotDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { data: lot, isLoading } = useLot(id);
   const updateLot = useUpdateLot();
   const archiveLot = useArchiveLot();
+  const linkProprietaire = useLinkProprietaireToLot();
+  const unlinkProprietaire = useUnlinkProprietaireFromLot();
+  const setMandataire = useSetLotMandataire();
+  const { data: missions = [] } = useMissions({ lot_id: id });
 
   const [editing, setEditing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -388,8 +463,8 @@ export function LotDetailPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2563EB]/10">
-            <DoorOpen className="h-5 w-5 text-[#2563EB]" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+            <DoorOpen className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-foreground">
@@ -440,7 +515,6 @@ export function LotDetailPage() {
               </Button>
               <Button
                 size="sm"
-                className="bg-[#2563EB] hover:bg-[#1d4ed8]"
                 onClick={form.handleSubmit(onSubmit)}
                 disabled={updateLot.isPending}
               >
@@ -491,7 +565,7 @@ export function LotDetailPage() {
                       lot.meuble ? (
                         <Badge
                           variant="outline"
-                          className="bg-emerald-100 text-emerald-700 border-emerald-200"
+                          className="bg-success/10 text-success border-success/20"
                         >
                           Oui
                         </Badge>
@@ -964,6 +1038,162 @@ export function LotDetailPage() {
               )}
             </AnimatePresence>
           </CollapsibleSection>
+
+
+          {/* --- Section: Tiers associés --- */}
+          <CollapsibleSection title="Tiers associés" defaultOpen={false}>
+            <div className="space-y-5">
+
+              {/* Propriétaires */}
+              <div>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                  Propriétaires
+                </p>
+                {(lot.proprietaires ?? []).length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic">Aucun propriétaire lié</p>
+                ) : (
+                  <div className="space-y-1">
+                    {(lot.proprietaires ?? []).map((p) => (
+                      <div
+                        key={p.tiers_id}
+                        className="flex items-center justify-between rounded-md border px-3 py-2 hover:bg-muted/40 transition-colors"
+                      >
+                        <button
+                          type="button"
+                          className="flex items-center gap-2 text-sm text-left flex-1 min-w-0"
+                          onClick={() => navigate(`/app/tiers/${p.tiers_id}`)}
+                        >
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted">
+                            {p.type === 'morale'
+                              ? <Building2 className="h-3 w-3 text-muted-foreground" />
+                              : <User className="h-3 w-3 text-muted-foreground" />}
+                          </div>
+                          <span className="font-medium truncate">{p.nom_complet}</span>
+                          {p.email && <span className="text-xs text-muted-foreground truncate hidden sm:block">{p.email}</span>}
+                        </button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0 ml-2 shrink-0 text-muted-foreground hover:text-destructive"
+                          onClick={() => {
+                            if (!id) return;
+                            unlinkProprietaire.mutate({ lotId: id, tiersId: p.tiers_id }, {
+                              onSuccess: () => toast.success('Propriétaire retiré'),
+                            });
+                          }}
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="mt-2">
+                  <TiersSearch
+                    placeholder="Ajouter un propriétaire..."
+                    excludeIds={(lot.proprietaires ?? []).map((p) => p.tiers_id)}
+                    onSelect={(tiersId) => {
+                      if (!id) return;
+                      linkProprietaire.mutate({ lotId: id, tiers_id: tiersId }, {
+                        onSuccess: () => toast.success('Propriétaire ajouté'),
+                        onError: () => toast.error('Erreur lors de l\'ajout'),
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Mandataire */}
+              <div>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                  Mandataire
+                </p>
+                {lot.mandataire ? (
+                  <div className="flex items-center justify-between rounded-md border px-3 py-2 hover:bg-muted/40 transition-colors">
+                    <button
+                      type="button"
+                      className="flex items-center gap-2 text-sm text-left flex-1 min-w-0"
+                      onClick={() => navigate(`/app/tiers/${lot.mandataire!.tiers_id}`)}
+                    >
+                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                        {lot.mandataire.type === 'morale'
+                          ? <Building2 className="h-3 w-3 text-primary" />
+                          : <User className="h-3 w-3 text-primary" />}
+                      </div>
+                      <span className="font-medium truncate">{lot.mandataire.nom_complet}</span>
+                      {lot.mandataire.email && <span className="text-xs text-muted-foreground truncate hidden sm:block">{lot.mandataire.email}</span>}
+                    </button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 w-6 p-0 ml-2 shrink-0 text-muted-foreground hover:text-destructive"
+                      onClick={() => {
+                        if (!id) return;
+                        setMandataire.mutate({ lotId: id, tiers_id: null }, {
+                          onSuccess: () => toast.success('Mandataire retiré'),
+                        });
+                      }}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-sm text-muted-foreground italic mb-2">Aucun mandataire</p>
+                    <TiersSearch
+                      placeholder="Définir un mandataire..."
+                      onSelect={(tiersId) => {
+                        if (!id) return;
+                        setMandataire.mutate({ lotId: id, tiers_id: tiersId }, {
+                          onSuccess: () => toast.success('Mandataire défini'),
+                          onError: () => toast.error('Erreur lors de la définition'),
+                        });
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </CollapsibleSection>
+
+          {/* --- Section: Missions --- */}
+          <CollapsibleSection title="Missions" defaultOpen={false}>
+            {missions.length === 0 ? (
+              <p className="text-sm text-muted-foreground italic">Aucune mission liée à ce lot</p>
+            ) : (
+              <div className="space-y-1">
+                {missions.map((m) => (
+                  <div
+                    key={m.id}
+                    className="flex items-center justify-between rounded-md border px-3 py-2 hover:bg-muted/40 cursor-pointer transition-colors"
+                    onClick={() => navigate(`/app/missions/${m.id}`)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <div>
+                        <p className="text-sm font-mono font-medium">{m.reference}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {m.date_debut
+                            ? format(new Date(m.date_debut), 'd MMM yyyy', { locale: fr })
+                            : 'Sans date'}
+                        </p>
+                      </div>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={`text-xs ${STATUT_COLORS[m.statut] ?? ''}`}
+                    >
+                      {STATUT_LABELS[m.statut] ?? m.statut}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CollapsibleSection>
+
         </div>
       </Form>
 
